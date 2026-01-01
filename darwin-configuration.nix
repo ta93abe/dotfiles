@@ -27,7 +27,6 @@
   # List packages installed in system profile
   environment.systemPackages = with pkgs; [
     # Core utilities
-    vim
     git
     curl
     wget

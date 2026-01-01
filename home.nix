@@ -19,19 +19,14 @@
 
     # Packages to install for this user
     packages = with pkgs; [
-      # Editors
+      # Editor
       helix
-      neovim
-      emacs
-      vim
 
       # Search & Navigation
       ripgrep
       ripgrep-all
       fd
       fzf
-      peco
-      sk # skim
       broot
       zoxide
       ghq
@@ -43,7 +38,6 @@
 
       # File management
       eza
-      lsd
       tree
       dust
       choose
@@ -51,7 +45,6 @@
       # Git tools
       gh
       git-delta
-      diff-so-fancy
       gitui
       tig
       git-interactive-rebase-tool
@@ -60,22 +53,17 @@
       pre-commit
 
       # System monitoring
-      htop
       bottom
       procs
       bandwhich
       gping
 
       # Terminal & Shell
-      tmux
       zellij
-      nushell
-      fish
       starship
 
       # Text processing
       jq
-      jql
       fx
       jo
       sd
@@ -85,7 +73,6 @@
       angle-grinder
 
       # HTTP clients
-      httpie
       xh
       curl
 
