@@ -81,6 +81,55 @@
 
       # Network tools
       dog
+      nmap
+      mtr
+      httpstat
+
+      # Database tools
+      usql
+      pgcli
+      mycli
+      litecli
+
+      # Shell tools
+      shellcheck
+      shfmt
+
+      # Kubernetes tools
+      k9s
+      helm
+      kubectx
+      stern
+
+      # YAML/TOML tools
+      yq
+      dasel
+
+      # Documentation
+      pandoc
+      mdbook
+      glow
+
+      # Security & Secrets
+      age
+      sops
+
+      # Compression
+      p7zip
+      zstd
+
+      # File sync
+      rsync
+      rclone
+
+      # Image processing
+      imagemagick
+
+      # API tools
+      grpcurl
+
+      # Performance
+      samply
 
       # Build & Development
       act # GitHub Actions locally
