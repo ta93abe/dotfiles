@@ -27,40 +27,201 @@ This configuration prioritizes Nix packages over Homebrew:
 sh <(curl -L https://nixos.org/nix/install)
 ```
 
-## Setup
+## Complete Setup Guide
 
-### 1. Update configuration
+### Step 1: Install Nix Package Manager
 
-Before applying the configuration, update the following files with your personal information:
-
-**flake.nix:**
-- Replace `your-hostname` with your Mac's hostname (find it with `scutil --get ComputerName`)
-- Change `aarch64-darwin` to `x86_64-darwin` if you have an Intel Mac
-- Replace `your-username` with your macOS username
-
-**home.nix:**
-- Replace `your-username` with your macOS username
-- Update Git configuration (name and email)
-- Customize packages and settings as needed
-
-### 2. Build and apply configuration
-
-First time setup:
+Install Nix with flake support:
 
 ```bash
-# Build the configuration
-nix build .#darwinConfigurations.your-hostname.system
+# Install Nix (official installer)
+sh <(curl -L https://nixos.org/nix/install)
+
+# Restart your shell
+exec $SHELL
+
+# Verify installation
+nix --version
+```
+
+**Expected output**: `nix (Nix) 2.x.x`
+
+### Step 2: Clone this Repository
+
+```bash
+# Clone to your desired location
+git clone https://github.com/your-username/dotfiles.git ~/.dotfiles
+cd ~/.dotfiles
+```
+
+### Step 3: Customize Configuration
+
+**Get your system information:**
+
+```bash
+# Get your hostname
+scutil --get ComputerName
+# Example output: "MacBook-Pro"
+
+# Get your username
+whoami
+# Example output: "john"
+
+# Check your architecture
+uname -m
+# Output: "arm64" for Apple Silicon, "x86_64" for Intel
+```
+
+**Edit `flake.nix`:**
+
+```nix
+# Line 19-21: Update hostname and architecture
+darwinConfigurations = {
+  "your-hostname" = darwin.lib.darwinSystem {  # ← Change this
+    system = "aarch64-darwin";  # ← "x86_64-darwin" for Intel
+    # ...
+```
+
+```nix
+# Line 28: Update username
+home-manager.users.your-username = import ./home.nix;  # ← Change this
+```
+
+**Edit `home.nix`:**
+
+```nix
+# Line 14-15: Update username and home directory
+username = "your-username";  # ← Change this
+homeDirectory = "/Users/your-username";  # ← Change this
+```
+
+```nix
+# Line 156-157: Update Git config
+userName = "Your Name";  # ← Change this
+userEmail = "your.email@example.com";  # ← Change this
+```
+
+### Step 4: Initial Build & Apply
+
+**First-time installation:**
+
+```bash
+# Build the configuration (this may take 10-30 minutes)
+nix build .#darwinConfigurations.YOUR-HOSTNAME.system
 
 # Apply the configuration
 ./result/sw/bin/darwin-rebuild switch --flake .
+
+# Set fish as your default shell (if using fish)
+echo $(which fish) | sudo tee -a /etc/shells
+chsh -s $(which fish)
 ```
 
-### 3. Update configuration
+**What happens during build:**
+- Downloads 124+ CLI tools
+- Downloads programming languages
+- Configures system settings
+- Sets up Homebrew for GUI apps
+- Configures fish shell
 
-After making changes to the configuration files:
+### Step 5: Restart Terminal
+
+```bash
+# Restart your terminal or run
+exec fish
+
+# Verify installation
+which helix   # Should show nix store path
+which fzf     # Should show nix store path
+starship --version  # Should work
+```
+
+### Step 6: Post-Installation
+
+**Verify everything works:**
+
+```bash
+# Test modern CLI tools
+eza -la       # Better ls
+bat README.md # Better cat
+rg "nix"      # Better grep
+
+# Test shell integration
+zoxide --version  # Smart cd
+mcfly --version   # History search
+
+# Test Kubernetes tools (if using)
+k9s version
+helm version
+
+# Test database tools
+usql --version
+```
+
+**Check Homebrew GUI apps:**
+
+```bash
+# List installed casks
+brew list --cask
+
+# Should show: chrome, firefox, docker, etc.
+```
+
+## Updating Your System
+
+### Daily Usage
+
+**Apply configuration changes:**
+
+```bash
+cd ~/.dotfiles
+
+# After editing any .nix files
+darwin-rebuild switch --flake .
+```
+
+**Update packages:**
+
+```bash
+# Update flake inputs
+nix flake update
+
+# Rebuild with updated packages
+darwin-rebuild switch --flake .
+```
+
+### Adding New Packages
+
+**1. Search for package:**
+
+```bash
+nix search nixpkgs ripgrep
+```
+
+**2. Add to `home.nix`:**
+
+```nix
+packages = with pkgs; [
+  # ... existing packages
+  your-new-package
+];
+```
+
+**3. Apply:**
 
 ```bash
 darwin-rebuild switch --flake .
+```
+
+### Removing Packages
+
+**1. Remove from `home.nix`**
+
+**2. Apply and clean up:**
+
+```bash
+darwin-rebuild switch --flake .
+nix-collect-garbage -d
 ```
 
 ## What's included
@@ -172,12 +333,133 @@ brew list --cask
 
 ## Troubleshooting
 
-If you encounter issues:
+### Common Issues
+
+#### Issue 1: "experimental-features" error
+
+**Error:**
+```
+error: experimental Nix feature 'nix-command' is disabled
+```
+
+**Solution:**
+```bash
+# Create/edit nix config
+mkdir -p ~/.config/nix
+echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
+```
+
+#### Issue 2: Build fails with "permission denied"
+
+**Solution:**
+```bash
+# Ensure Nix is properly installed
+sudo nix-daemon
+# Or restart
+sudo launchctl kickstart -k system/org.nixos.nix-daemon
+```
+
+#### Issue 3: Homebrew conflicts
+
+**Error:**
+```
+Warning: formula/cask is already installed
+```
+
+**Solution:**
+```bash
+# Let nix-darwin manage it
+darwin-rebuild switch --flake .
+
+# If still conflicts, uninstall manually
+brew uninstall --cask <app-name>
+```
+
+#### Issue 4: Fish shell not activating
+
+**Solution:**
+```bash
+# Check if fish is in allowed shells
+cat /etc/shells | grep fish
+
+# If not, add it
+echo $(which fish) | sudo tee -a /etc/shells
+
+# Change shell
+chsh -s $(which fish)
+
+# Logout and login again
+```
+
+#### Issue 5: Slow rebuild
+
+**Solution:**
+```bash
+# Use binary cache
+nix-channel --add https://nixos.org/channels/nixpkgs-unstable
+nix-channel --update
+
+# Or rebuild with max-jobs
+darwin-rebuild switch --flake . --max-jobs auto
+```
+
+### Maintenance Commands
+
+**Clean up old generations:**
 
 ```bash
-# Clean build cache
+# List generations
+nix-env --list-generations
+
+# Delete old generations (keep last 5)
+nix-env --delete-generations +5
+
+# Collect garbage
 nix-collect-garbage -d
+
+# Optimize store
+nix-store --optimise
+```
+
+**Reset to fresh state:**
+
+```bash
+# Remove all old generations
+sudo nix-collect-garbage -d
 
 # Rebuild from scratch
 darwin-rebuild switch --flake . --recreate-lock-file
+```
+
+**Check what's using disk space:**
+
+```bash
+# Show store paths and sizes
+nix path-info -rsSh /run/current-system | sort -k2 -h
+```
+
+### Getting Help
+
+- **Nix Manual**: https://nixos.org/manual/nix/stable/
+- **nix-darwin**: https://github.com/LnL7/nix-darwin
+- **Home Manager**: https://nix-community.github.io/home-manager/
+- **Search packages**: https://search.nixos.org/packages
+
+### Useful Commands Reference
+
+```bash
+# Show current configuration
+darwin-rebuild --show-trace switch --flake .
+
+# Rollback to previous generation
+darwin-rebuild rollback
+
+# List installed packages
+nix-env -q
+
+# Check package details
+nix-info
+
+# Test configuration without applying
+darwin-rebuild build --flake .
 ```
