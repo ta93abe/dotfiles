@@ -82,7 +82,7 @@ darwin-rebuild switch --flake .
   - System monitoring (bottom, procs, bandwhich, etc.)
   - **Cloud CLIs** (AWS, Azure, GCP, Firebase, Fly.io) via Nix
   - **DevOps tools** (CircleCI, etc.) via Nix
-  - **Python tools** (poetry, pipx) via Nix
+  - **Python tools** (uv - modern package manager) via Nix
   - **Mobile dev** (CocoaPods) via Nix
 - Programming languages (Node.js, Python, Rust, Go, Zig, Julia, etc.) via Nix
 - Git configuration with delta integration

@@ -126,8 +126,7 @@
 
       # Package managers & tools
       topgrade
-      poetry
-      pipx
+      uv # Modern Python package manager (replaces poetry/pipx)
 
       # Cloud & Infrastructure
       awscli2
