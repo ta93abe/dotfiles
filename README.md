@@ -55,25 +55,69 @@ darwin-rebuild switch --flake .
 
 - macOS system defaults (Dock, Finder, keyboard settings)
 - Touch ID for sudo
-- Nerd Fonts (FiraCode, JetBrainsMono)
-- System packages
+- Nerd Fonts (FiraCode, JetBrainsMono, Hack, etc.)
+- System packages (databases, DevOps tools, etc.)
+- **Homebrew integration** for GUI apps and specialized tools
 
 ### User Configuration (home.nix)
 
-- Development tools (helix, ripgrep, fd, bat, etc.)
-- Programming languages (Node.js, Python, Rust, Go)
-- Git configuration
-- Zsh with syntax highlighting and custom aliases
+- **100+ CLI tools** including:
+  - Modern Unix tools (bat, eza, ripgrep, fd, etc.)
+  - Git tools (delta, gitui, gh, etc.)
+  - Development tools (helix, neovim, tmux, etc.)
+  - System monitoring (bottom, procs, bandwhich, etc.)
+- Programming languages (Node.js, Python, Rust, Go, Zig, Julia, etc.)
+- Git configuration with delta integration
+- Zsh with:
+  - Syntax highlighting
+  - Auto-completion
+  - Modern aliases
+  - Zoxide integration
+  - fzf keybindings
 - Starship prompt
 - Helix editor configuration
+
+### Homebrew Management
+
+nix-darwin manages Homebrew declaratively:
+
+- **GUI applications** (casks): Browsers, IDEs, design tools, etc.
+- **Specialized CLI tools**: Cloud CLIs, version managers, etc.
+- Automatic cleanup of unlisted packages
 
 ## Managing packages
 
 Add packages to either:
-- `darwin-configuration.nix` for system-wide packages
+- `darwin-configuration.nix` for system-wide packages and Homebrew casks/brews
 - `home.nix` for user-specific packages
 
 Then run `darwin-rebuild switch --flake .` to apply changes.
+
+### Migrating from Homebrew
+
+If you're migrating from Homebrew:
+
+1. **CLI tools**: Most are available in nixpkgs and have been added to `home.nix`
+2. **GUI apps**: Managed via nix-darwin's Homebrew module in `darwin-configuration.nix`
+3. **Old Homebrew installations**: After applying the nix-darwin configuration, you can safely uninstall packages managed by nix-darwin:
+
+```bash
+# The configuration will automatically manage Homebrew
+# Packages not in the config will be removed with cleanup = "zap"
+darwin-rebuild switch --flake .
+```
+
+### Finding packages
+
+Search for Nix packages:
+
+```bash
+# Search nixpkgs
+nix search nixpkgs <package-name>
+
+# Example
+nix search nixpkgs ripgrep
+```
 
 ## Troubleshooting
 

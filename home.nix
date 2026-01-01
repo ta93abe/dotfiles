@@ -12,30 +12,122 @@
 
     # Packages to install for this user
     packages = with pkgs; [
-      # Development tools
+      # Editors
       helix
+      neovim
+      emacs
+      vim
+
+      # Search & Navigation
       ripgrep
+      ripgrep-all
       fd
-      bat
-      eza
       fzf
-      jq
+      peco
+      sk # skim
+      broot
+      zoxide
+      ghq
+
+      # File viewers & converters
+      bat
+      hexyl
+      viu
+
+      # File management
+      eza
+      lsd
       tree
+      dust
+      choose
+
+      # Git tools
+      gh
+      git-delta
+      diff-so-fancy
+      gitui
+      tig
+      git-interactive-rebase-tool
+      onefetch
+      lefthook
+      pre-commit
+
+      # System monitoring
+      htop
+      bottom
+      procs
+      bandwhich
+      gping
+
+      # Terminal & Shell
+      tmux
+      zellij
+      nushell
+      fish
+      starship
+
+      # Text processing
+      jq
+      jql
+      fx
+      jo
+      sd
+      grex
+      xsv
+      csview
+      angle-grinder
+
+      # HTTP clients
+      httpie
+      xh
+      curl
+
+      # Network tools
+      dog
+
+      # Build & Development
+      act # GitHub Actions locally
+
+      # Benchmarking
+      hyperfine
+      oha
+
+      # Code analysis
+      tokei
+      fselect
+
+      # Media
+      ffmpeg
+      gifski
+      silicon
+
+      # Data & Formats
+      protobuf
 
       # Languages
       nodejs
-      python3
+      python310
       rustup
       go
+      zig
+      nim
+      julia
+      ocaml
+      opam
+      erlang
+      elixir
 
-      # CLI utilities
-      htop
-      tmux
+      # Package managers & tools
+      topgrade
+
+      # Utilities
+      tldr
       neofetch
-      gh
+      shellharden
+      pueue
 
       # Other
-      starship
+      ko
     ];
 
     # Environment variables
@@ -62,14 +154,42 @@
     syntaxHighlighting.enable = true;
 
     shellAliases = {
+      # Modern replacements
       ls = "eza";
+      ll = "eza -l";
+      la = "eza -la";
       cat = "bat";
       vim = "hx";
+      top = "btm"; # bottom
+      ps = "procs";
+      du = "dust";
+      find = "fd";
+      grep = "rg";
+
+      # Git aliases
+      g = "git";
+      gs = "git status";
+      ga = "git add";
+      gc = "git commit";
+      gp = "git push";
+      gl = "git pull";
+      gd = "git diff";
+
+      # Directory navigation
+      ".." = "cd ..";
+      "..." = "cd ../..";
     };
 
     initExtra = ''
       # Starship prompt
       eval "$(starship init zsh)"
+
+      # Zoxide (better cd)
+      eval "$(zoxide init zsh)"
+
+      # fzf keybindings
+      source ${pkgs.fzf}/share/fzf/key-bindings.zsh
+      source ${pkgs.fzf}/share/fzf/completion.zsh
     '';
   };
 
