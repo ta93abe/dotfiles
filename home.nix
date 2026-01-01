@@ -509,6 +509,65 @@
     };
   };
 
+  # Ghostty terminal configuration
+  xdg.configFile."ghostty/config".text = ''
+    # Font configuration
+    font-family = HackGen35Nerd Console
+    font-size = 14
+    font-thicken = true
+
+    # Theme: Tokyo Night
+    background = 1a1b26
+    foreground = c0caf5
+    cursor-color = c0caf5
+    selection-background = 33467c
+    selection-foreground = c0caf5
+
+    # Colors
+    palette = 0=#15161e
+    palette = 1=#f7768e
+    palette = 2=#9ece6a
+    palette = 3=#e0af68
+    palette = 4=#7aa2f7
+    palette = 5=#bb9af7
+    palette = 6=#7dcfff
+    palette = 7=#a9b1d6
+    palette = 8=#414868
+    palette = 9=#f7768e
+    palette = 10=#9ece6a
+    palette = 11=#e0af68
+    palette = 12=#7aa2f7
+    palette = 13=#bb9af7
+    palette = 14=#7dcfff
+    palette = 15=#c0caf5
+
+    # Window
+    window-padding-x = 10
+    window-padding-y = 10
+    window-decoration = true
+    window-theme = dark
+
+    # Tab bar
+    tab-bar-position = top
+
+    # Shell
+    shell-integration = fish
+
+    # Cursor
+    cursor-style = block
+    cursor-style-blink = true
+
+    # Mouse
+    mouse-hide-while-typing = true
+
+    # Clipboard
+    clipboard-read = allow
+    clipboard-write = allow
+
+    # Performance
+    unfocused-split-opacity = 0.9
+  '';
+
   # Let Home Manager install and manage itself
   programs.home-manager.enable = true;
 }
