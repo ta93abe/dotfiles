@@ -181,9 +181,6 @@
       # Mobile development
       cocoapods
 
-      # Dotfiles management
-      chezmoi
-
       # Utilities
       tldr
       neofetch
@@ -319,11 +316,6 @@
           cd $selected_repository
           commandline -f repaint
         end
-      '';
-
-      # chezmoi utility
-      chezmoi-cd = ''
-        cd (chezmoi source-path)
       '';
 
       # Fish key bindings
