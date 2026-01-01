@@ -1,464 +1,481 @@
 # dotfiles
 
-My personal dotfiles managed with **nix-darwin** and **home-manager**.
+**nix-darwin** と **home-manager** で管理する個人用dotfiles
 
-## Philosophy: Nix-First Approach
+## 哲学：Nix-Firstアプローチ
 
-This configuration prioritizes Nix packages over Homebrew:
+この構成では、HomebrewよりもNixパッケージを優先します：
 
-- ✅ **CLI tools**: 100% managed by Nix via `home.nix`
-- ✅ **System packages**: Managed by Nix via `darwin-configuration.nix`
-- ⚠️ **GUI applications**: Managed by Homebrew Cask (only when unavailable in nixpkgs)
+- ✅ **CLIツール**: 100% Nixで管理（`home.nix`）
+- ✅ **システムパッケージ**: Nixで管理（`darwin-configuration.nix`）
+- ⚠️ **GUIアプリ**: Homebrew Caskで管理（nixpkgsで利用できない場合のみ）
 
-**Why Nix?**
-- Declarative and reproducible
-- Atomic upgrades and rollbacks
-- Isolated package environments
-- No dependency conflicts
+**Nixを使う理由：**
+- 宣言的で再現可能
+- アトミックなアップグレードとロールバック
+- 隔離されたパッケージ環境
+- 依存関係の競合がない
 
-## Prerequisites
+## 前提条件
 
 - macOS
-- [Nix package manager](https://nixos.org/download.html) installed with flake support
+- flakeサポート付きの[Nixパッケージマネージャー](https://nixos.org/download.html)
 
-### Installing Nix
+### Nixのインストール
 
 ```bash
 sh <(curl -L https://nixos.org/nix/install)
 ```
 
-## Complete Setup Guide
+## セットアップガイド
 
-### Step 1: Install Nix Package Manager
+### ステップ 1: Nixパッケージマネージャーのインストール
 
-Install Nix with flake support:
+flakeサポート付きでNixをインストール：
 
 ```bash
-# Install Nix (official installer)
+# Nixをインストール（公式インストーラー）
 sh <(curl -L https://nixos.org/nix/install)
 
-# Restart your shell
+# シェルを再起動
 exec $SHELL
 
-# Verify installation
+# インストール確認
 nix --version
 ```
 
-**Expected output**: `nix (Nix) 2.x.x`
+**期待される出力**: `nix (Nix) 2.x.x`
 
-### Step 2: Clone this Repository
+### ステップ 2: このリポジトリをクローン
 
 ```bash
-# Clone to your desired location
+# 任意の場所にクローン
 git clone https://github.com/your-username/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 ```
 
-### Step 3: Create Personal Configuration
+### ステップ 3: 個人設定の作成
 
-**Create your personal configuration file:**
+**個人設定ファイルを作成：**
 
 ```bash
-# Copy the template
+# テンプレートをコピー
 cp personal.nix.example personal.nix
 ```
 
-**Get your system information:**
+**システム情報を取得：**
 
 ```bash
-# Get your hostname
+# ホスト名を取得
 scutil --get ComputerName
-# Example output: "MacBook-Pro"
+# 例: "MacBook-Pro"
 
-# Get your username
+# ユーザー名を取得
 whoami
-# Example output: "john"
+# 例: "john"
 ```
 
-**Edit `personal.nix` with your information:**
+**`personal.nix` を編集：**
 
 ```nix
 {
-  # System configuration
-  hostname = "MacBook-Pro";  # ← Your actual hostname
-  username = "john";         # ← Your actual username
+  # システム設定
+  hostname = "MacBook-Pro";  # ← 実際のホスト名
+  username = "john";         # ← 実際のユーザー名
 
-  # Git configuration
+  # Git設定
   git = {
-    userName = "John Doe";              # ← Your name
-    userEmail = "john@example.com";     # ← Your email
+    userName = "John Doe";              # ← あなたの名前
+    userEmail = "john@example.com";     # ← あなたのメールアドレス
   };
 }
 ```
 
-**Important Notes:**
-- `personal.nix` is gitignored and won't be committed
-- Keep `personal.nix.example` as a template for other machines
-- Update architecture in `flake.nix` line 27 if using Intel Mac (`x86_64-darwin`)
+**重要な注意事項：**
+- `personal.nix` はgitignoreされており、コミットされません
+- 他のマシン用のテンプレートとして `personal.nix.example` を保持してください
+- Intel Macを使用している場合は、`flake.nix` の27行目のアーキテクチャを更新してください（`x86_64-darwin`）
 
-### Step 4: Initial Build & Apply
+### ステップ 4: 初期ビルドと適用
 
-**First-time installation:**
+**初回インストール：**
 
 ```bash
-# Build the configuration (this may take 10-30 minutes)
-# The hostname is read from your personal.nix file
+# 設定をビルド（10〜30分かかる場合があります）
+# ホスト名はpersonal.nixファイルから読み込まれます
 nix build .#darwinConfigurations.$(nix eval --raw .#darwinConfigurations --apply 'x: builtins.head (builtins.attrNames x)').system
 
-# Or simply use your hostname directly (from personal.nix)
+# または、ホスト名を直接指定（personal.nixから）
 nix build .#darwinConfigurations.YOUR-HOSTNAME.system
 
-# Apply the configuration
+# 設定を適用
 ./result/sw/bin/darwin-rebuild switch --flake .
 
-# Set fish as your default shell
+# Fishをデフォルトシェルに設定
 echo $(which fish) | sudo tee -a /etc/shells
 chsh -s $(which fish)
 ```
 
-**What happens during build:**
-- Downloads 124+ CLI tools
-- Downloads programming languages
-- Configures system settings
-- Sets up Homebrew for GUI apps
-- Configures fish shell
+**ビルド中に起こること：**
+- 124個以上のCLIツールをダウンロード
+- プログラミング言語をダウンロード
+- システム設定を構成
+- GUIアプリ用のHomebrewをセットアップ
+- Fishシェルを構成
 
-### Step 5: Restart Terminal
+### ステップ 5: ターミナルを再起動
 
 ```bash
-# Restart your terminal or run
+# ターミナルを再起動、または実行
 exec fish
 
-# Verify installation
-which helix   # Should show nix store path
-which fzf     # Should show nix store path
-starship --version  # Should work
+# インストール確認
+which helix   # nixストアパスが表示されるはず
+which fzf     # nixストアパスが表示されるはず
+starship --version  # 動作するはず
 ```
 
-### Step 6: Post-Installation
+### ステップ 6: インストール後の確認
 
-**Verify everything works:**
+**すべてが動作することを確認：**
 
 ```bash
-# Test modern CLI tools
-eza -la       # Better ls
-bat README.md # Better cat
-rg "nix"      # Better grep
+# モダンなCLIツールをテスト
+eza -la       # 改良版ls
+bat README.md # 改良版cat
+rg "nix"      # 改良版grep
 
-# Test shell integration
-zoxide --version  # Smart cd
-mcfly --version   # History search
+# シェル統合をテスト
+zoxide --version  # スマートcd
+mcfly --version   # 履歴検索
 
-# Test Kubernetes tools (if using)
+# Kubernetesツールをテスト（使用している場合）
 k9s version
 helm version
 
-# Test database tools
+# データベースツールをテスト
 usql --version
 ```
 
-**Check Homebrew GUI apps:**
+**Homebrew GUIアプリを確認：**
 
 ```bash
-# List installed casks
+# インストール済みcaskをリスト
 brew list --cask
 
-# Should show: chrome, firefox, docker, etc.
+# 表示されるべきもの: chrome, firefox, dockerなど
 ```
 
-## Updating Your System
+## システムの更新
 
-### Daily Usage
+### 日常的な使用
 
-**Apply configuration changes:**
+**設定変更を適用：**
 
 ```bash
 cd ~/.dotfiles
 
-# After editing any .nix files
+# .nixファイルを編集した後
 darwin-rebuild switch --flake .
 ```
 
-**Update packages:**
+**パッケージを更新：**
 
 ```bash
-# Update flake inputs
+# flake inputsを更新
 nix flake update
 
-# Rebuild with updated packages
+# 更新されたパッケージでリビルド
 darwin-rebuild switch --flake .
 ```
 
-### Adding New Packages
+### 新しいパッケージの追加
 
-**1. Search for package:**
+**1. パッケージを検索：**
 
 ```bash
 nix search nixpkgs ripgrep
 ```
 
-**2. Add to `home.nix`:**
+**2. `home.nix` に追加：**
 
 ```nix
 packages = with pkgs; [
-  # ... existing packages
+  # ... 既存のパッケージ
   your-new-package
 ];
 ```
 
-**3. Apply:**
+**3. 適用：**
 
 ```bash
 darwin-rebuild switch --flake .
 ```
 
-### Removing Packages
+### パッケージの削除
 
-**1. Remove from `home.nix`**
+**1. `home.nix` から削除**
 
-**2. Apply and clean up:**
+**2. 適用してクリーンアップ：**
 
 ```bash
 darwin-rebuild switch --flake .
 nix-collect-garbage -d
 ```
 
-## What's included
+## 含まれるもの
 
-### System Configuration (darwin-configuration.nix) - Nix Managed
+### システム設定（darwin-configuration.nix）- Nix管理
 
-- macOS system defaults (Dock, Finder, keyboard settings)
-- Touch ID for sudo
-- Nerd Fonts (FiraCode, JetBrainsMono, Hack, etc.) via Nix
-- System packages (databases, DevOps tools, etc.) via Nix
-- Minimal Homebrew integration (GUI apps ONLY)
+- macOSシステムデフォルト（Dock、Finder、キーボード設定）
+- sudo用のTouch ID
+- Nerd Fonts（FiraCode、JetBrainsMono、Hackなど）via Nix
+- システムパッケージ（データベース、DevOpsツールなど）via Nix
+- 最小限のHomebrew統合（GUIアプリのみ）
 
-### User Configuration (home.nix) - 100% Nix
+### ユーザー設定（home.nix）- 100% Nix
 
-- **110+ CLI tools** - ALL managed by Nix:
-  - Modern Unix tools (bat, eza, ripgrep, fd, etc.)
-  - Git tools (delta, gitui, gh, etc.)
-  - Development tools (helix, neovim, tmux, etc.)
-  - System monitoring (bottom, procs, bandwhich, etc.)
-  - **Cloud CLIs** (AWS, Azure, GCP, Firebase, Fly.io) via Nix
-  - **DevOps tools** (CircleCI, etc.) via Nix
-  - **Python tools** (uv - modern package manager) via Nix
-  - **Mobile dev** (CocoaPods) via Nix
-- Programming languages (Node.js, Python, Rust, Go, Zig, Julia, etc.) via Nix
-- Git configuration with delta integration
-- Zsh with:
-  - Syntax highlighting
-  - Auto-completion
-  - Modern aliases
-  - Zoxide integration
-  - fzf keybindings
-- Starship prompt
-- Helix editor configuration
+- **124個以上のCLIツール** - すべてNixで管理：
+  - モダンなUnixツール（bat、eza、ripgrep、fdなど）
+  - Gitツール（delta、gitui、ghなど）
+  - 開発ツール（helix、zellijなど）
+  - システム監視（bottom、procs、bandwhichなど）
+  - **クラウドCLI**（AWS、Azure、GCP、Firebase、Fly.io）via Nix
+  - **DevOpsツール**（CircleCIなど）via Nix
+  - **Pythonツール**（uv - モダンなパッケージマネージャー）via Nix
+  - **モバイル開発**（CocoaPods）via Nix
+- プログラミング言語（Node.js、Python、Rust、Go、Zig、Juliaなど）via Nix
+- Delta統合付きGit設定
+- Fish shellの設定：
+  - シンタックスハイライト
+  - オートコンプリート
+  - モダンなエイリアス
+  - Zoxide統合
+  - fzfキーバインド
+- Starshipプロンプト
+- Helixエディタ設定
+- Ghosttyターミナル設定（Tokyo Nightテーマ）
+- Zellij設定（Vim風キーバインド）
+- fzf設定（詳細なカラースキームとプレビュー）
 
-### Homebrew (Minimal Usage)
+### Homebrew（最小限の使用）
 
-**Only for GUI applications** that are not available in nixpkgs:
+**nixpkgsで利用できないGUIアプリケーションのみ：**
 
-- Browsers, IDEs, design tools
-- macOS-specific GUI applications
-- **Zero CLI tools via Homebrew** - all CLI tools use Nix
-- Automatic cleanup of unlisted packages
+- ブラウザ、IDE、デザインツール
+- macOS固有のGUIアプリケーション
+- **Homebrew経由のCLIツールはゼロ** - すべてのCLIツールはNixを使用
+- リストにないパッケージの自動クリーンアップ
 
-## Managing packages
+## パッケージ管理
 
-### Nix-First Policy
+### Nix-Firstポリシー
 
-**Always prefer Nix over Homebrew:**
+**常にHomebrewよりもNixを優先：**
 
-1. **For CLI tools**: Add to `home.nix` packages list
-2. **For system packages**: Add to `darwin-configuration.nix` environment.systemPackages
-3. **For GUI apps**: Only use Homebrew casks in `darwin-configuration.nix` if unavailable in nixpkgs
+1. **CLIツールの場合**: `home.nix` のパッケージリストに追加
+2. **システムパッケージの場合**: `darwin-configuration.nix` のenvironment.systemPackagesに追加
+3. **GUIアプリの場合**: nixpkgsで利用できない場合のみ、`darwin-configuration.nix` のHomebrew casksを使用
 
-Then run `darwin-rebuild switch --flake .` to apply changes.
+その後、`darwin-rebuild switch --flake .` を実行して変更を適用します。
 
-### Adding a new package
+### 新しいパッケージの追加
 
-**Step 1: Search for the package in nixpkgs**
+**ステップ 1: nixpkgsでパッケージを検索**
 
 ```bash
-# Search nixpkgs
-nix search nixpkgs <package-name>
+# nixpkgsを検索
+nix search nixpkgs <パッケージ名>
 
-# Example
+# 例
 nix search nixpkgs ripgrep
 ```
 
-**Step 2: Add to the appropriate config file**
+**ステップ 2: 適切な設定ファイルに追加**
 
-For CLI tools (most common):
+CLIツールの場合（最も一般的）：
 ```nix
 # home.nix
 packages = with pkgs; [
-  # ... existing packages
+  # ... 既存のパッケージ
   your-new-package
 ];
 ```
 
-For GUI apps (last resort):
+GUIアプリの場合（最後の手段）：
 ```nix
 # darwin-configuration.nix
 homebrew.casks = [
-  # ... existing casks
+  # ... 既存のcasks
   "your-gui-app"
 ];
 ```
 
-**Step 3: Apply changes**
+**ステップ 3: 変更を適用**
 
 ```bash
 darwin-rebuild switch --flake .
 ```
 
-### Migrating from Homebrew
+### Homebrewからの移行
 
-If you're migrating from Homebrew:
+Homebrewから移行する場合：
 
-1. **CLI tools**: ✅ All migrated to Nix in `home.nix`
-2. **GUI apps**: Managed via Homebrew casks in `darwin-configuration.nix`
-3. **Cleanup**: Homebrew packages not in config are auto-removed with `cleanup = "zap"`
+1. **CLIツール**: ✅ すべて`home.nix`のNixに移行済み
+2. **GUIアプリ**: `darwin-configuration.nix`でHomebrew casksを介して管理
+3. **クリーンアップ**: 設定にないHomebrewパッケージは`cleanup = "zap"`で自動削除
 
 ```bash
-# Apply the configuration - this will manage both Nix and Homebrew
+# 設定を適用 - これによりNixとHomebrewの両方が管理されます
 darwin-rebuild switch --flake .
 
-# Optional: List what Homebrew still manages
+# オプション: Homebrewがまだ管理しているものをリスト
 brew list --cask
 ```
 
-## Troubleshooting
+## トラブルシューティング
 
-### Common Issues
+### よくある問題
 
-#### Issue 1: "experimental-features" error
+#### 問題 1: "experimental-features" エラー
 
-**Error:**
+**エラー：**
 ```
 error: experimental Nix feature 'nix-command' is disabled
 ```
 
-**Solution:**
+**解決策：**
 ```bash
-# Create/edit nix config
+# nix設定を作成/編集
 mkdir -p ~/.config/nix
 echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
 ```
 
-#### Issue 2: Build fails with "permission denied"
+#### 問題 2: "permission denied" でビルドが失敗
 
-**Solution:**
+**解決策：**
 ```bash
-# Ensure Nix is properly installed
+# Nixが適切にインストールされていることを確認
 sudo nix-daemon
-# Or restart
+# または再起動
 sudo launchctl kickstart -k system/org.nixos.nix-daemon
 ```
 
-#### Issue 3: Homebrew conflicts
+#### 問題 3: Homebrewの競合
 
-**Error:**
+**エラー：**
 ```
 Warning: formula/cask is already installed
 ```
 
-**Solution:**
+**解決策：**
 ```bash
-# Let nix-darwin manage it
+# nix-darwinに管理させる
 darwin-rebuild switch --flake .
 
-# If still conflicts, uninstall manually
+# まだ競合する場合は、手動でアンインストール
 brew uninstall --cask <app-name>
 ```
 
-#### Issue 4: Fish shell not activating
+#### 問題 4: Fishシェルがアクティブにならない
 
-**Solution:**
+**解決策：**
 ```bash
-# Check if fish is in allowed shells
+# fishが許可されたシェルにあるか確認
 cat /etc/shells | grep fish
 
-# If not, add it
+# ない場合は追加
 echo $(which fish) | sudo tee -a /etc/shells
 
-# Change shell
+# シェルを変更
 chsh -s $(which fish)
 
-# Logout and login again
+# ログアウトして再度ログイン
 ```
 
-#### Issue 5: Slow rebuild
+#### 問題 5: リビルドが遅い
 
-**Solution:**
+**解決策：**
 ```bash
-# Use binary cache
+# バイナリキャッシュを使用
 nix-channel --add https://nixos.org/channels/nixpkgs-unstable
 nix-channel --update
 
-# Or rebuild with max-jobs
+# またはmax-jobsでリビルド
 darwin-rebuild switch --flake . --max-jobs auto
 ```
 
-### Maintenance Commands
+### メンテナンスコマンド
 
-**Clean up old generations:**
+**古い世代をクリーンアップ：**
 
 ```bash
-# List generations
+# 世代をリスト
 nix-env --list-generations
 
-# Delete old generations (keep last 5)
+# 古い世代を削除（最新5つを保持）
 nix-env --delete-generations +5
 
-# Collect garbage
+# ガベージコレクション
 nix-collect-garbage -d
 
-# Optimize store
+# ストアを最適化
 nix-store --optimise
 ```
 
-**Reset to fresh state:**
+**フレッシュな状態にリセット：**
 
 ```bash
-# Remove all old generations
+# すべての古い世代を削除
 sudo nix-collect-garbage -d
 
-# Rebuild from scratch
+# スクラッチからリビルド
 darwin-rebuild switch --flake . --recreate-lock-file
 ```
 
-**Check what's using disk space:**
+**ディスク使用量を確認：**
 
 ```bash
-# Show store paths and sizes
+# ストアパスとサイズを表示
 nix path-info -rsSh /run/current-system | sort -k2 -h
 ```
 
-### Getting Help
+### ヘルプ
 
-- **Nix Manual**: https://nixos.org/manual/nix/stable/
+- **Nixマニュアル**: https://nixos.org/manual/nix/stable/
 - **nix-darwin**: https://github.com/LnL7/nix-darwin
 - **Home Manager**: https://nix-community.github.io/home-manager/
-- **Search packages**: https://search.nixos.org/packages
+- **パッケージ検索**: https://search.nixos.org/packages
 
-### Useful Commands Reference
+### 便利なコマンドリファレンス
 
 ```bash
-# Show current configuration
+# 現在の設定を表示
 darwin-rebuild --show-trace switch --flake .
 
-# Rollback to previous generation
+# 前の世代にロールバック
 darwin-rebuild rollback
 
-# List installed packages
+# インストール済みパッケージをリスト
 nix-env -q
 
-# Check package details
+# パッケージの詳細を確認
 nix-info
 
-# Test configuration without applying
+# 適用せずに設定をテスト
 darwin-rebuild build --flake .
 ```
+
+## テーマとカラースキーム
+
+すべてのツールは **Tokyo Night** テーマで統一されています：
+
+- 🎨 **Ghostty**: Tokyo Nightカラーパレット
+- 🔍 **fzf**: Tokyo Nightカラースキーム + batプレビュー
+- 🎣 **Starship**: カスタムプロンプト（🎣アイコン）
+- 📝 **Helix**: Monokaiテーマ
+- 🪟 **Zellij**: Tokyo Nightテーマ + Vim風キーバインド
+
+## ライセンス
+
+MIT
