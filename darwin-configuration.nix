@@ -1,6 +1,15 @@
 { config, pkgs, ... }:
 
 {
+  # =============================================================================
+  # Nix-First Philosophy
+  # =============================================================================
+  # This configuration prioritizes Nix packages over Homebrew.
+  # - ALL CLI tools are managed via Nix (see home.nix)
+  # - System packages are managed via Nix (see environment.systemPackages below)
+  # - Homebrew is ONLY used for GUI applications (see homebrew.casks below)
+  # =============================================================================
+
   # Nix configuration
   nix = {
     settings = {
@@ -187,7 +196,6 @@
       "twitch"
 
       # Cloud & Database tools
-      "google-cloud-sdk"
       "confluent-cli"
       "redis-stack"
       "redis-stack-server"
@@ -228,36 +236,14 @@
     ];
 
     # Additional taps (repositories)
+    # Only for GUI applications and tools not available in nixpkgs
     taps = [
       "homebrew/cask-fonts"
       "homebrew/cask-versions"
-      "homebrew/services"
     ];
 
-    # CLI tools that are better managed via Homebrew
-    # (e.g., tools not in nixpkgs or with better Homebrew integration)
-    brews = [
-      # Cloud CLI tools
-      "awscli"
-      "azure-cli"
-      "firebase-cli"
-      "flyctl"
-
-      # Specialized tools
-      "chezmoi"
-      "circleci"
-      "cocoapods"
-
-      # Language-specific version managers
-      "anyenv"
-      "pyenv"
-      "poetry"
-      "pipx"
-
-      # Databases
-      "neo4j"
-      "meilisearch"
-    ];
+    # Note: CLI tools are managed via Nix packages in home.nix
+    # Homebrew is used ONLY for GUI applications (casks) that are not available in nixpkgs
   };
 
   # Used for backwards compatibility

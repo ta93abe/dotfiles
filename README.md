@@ -1,6 +1,20 @@
 # dotfiles
 
-My personal dotfiles managed with nix-darwin and home-manager.
+My personal dotfiles managed with **nix-darwin** and **home-manager**.
+
+## Philosophy: Nix-First Approach
+
+This configuration prioritizes Nix packages over Homebrew:
+
+- ✅ **CLI tools**: 100% managed by Nix via `home.nix`
+- ✅ **System packages**: Managed by Nix via `darwin-configuration.nix`
+- ⚠️ **GUI applications**: Managed by Homebrew Cask (only when unavailable in nixpkgs)
+
+**Why Nix?**
+- Declarative and reproducible
+- Atomic upgrades and rollbacks
+- Isolated package environments
+- No dependency conflicts
 
 ## Prerequisites
 
@@ -51,22 +65,26 @@ darwin-rebuild switch --flake .
 
 ## What's included
 
-### System Configuration (darwin-configuration.nix)
+### System Configuration (darwin-configuration.nix) - Nix Managed
 
 - macOS system defaults (Dock, Finder, keyboard settings)
 - Touch ID for sudo
-- Nerd Fonts (FiraCode, JetBrainsMono, Hack, etc.)
-- System packages (databases, DevOps tools, etc.)
-- **Homebrew integration** for GUI apps and specialized tools
+- Nerd Fonts (FiraCode, JetBrainsMono, Hack, etc.) via Nix
+- System packages (databases, DevOps tools, etc.) via Nix
+- Minimal Homebrew integration (GUI apps ONLY)
 
-### User Configuration (home.nix)
+### User Configuration (home.nix) - 100% Nix
 
-- **100+ CLI tools** including:
+- **110+ CLI tools** - ALL managed by Nix:
   - Modern Unix tools (bat, eza, ripgrep, fd, etc.)
   - Git tools (delta, gitui, gh, etc.)
   - Development tools (helix, neovim, tmux, etc.)
   - System monitoring (bottom, procs, bandwhich, etc.)
-- Programming languages (Node.js, Python, Rust, Go, Zig, Julia, etc.)
+  - **Cloud CLIs** (AWS, Azure, GCP, Firebase, Fly.io) via Nix
+  - **DevOps tools** (CircleCI, etc.) via Nix
+  - **Python tools** (poetry, pipx) via Nix
+  - **Mobile dev** (CocoaPods) via Nix
+- Programming languages (Node.js, Python, Rust, Go, Zig, Julia, etc.) via Nix
 - Git configuration with delta integration
 - Zsh with:
   - Syntax highlighting
@@ -77,39 +95,30 @@ darwin-rebuild switch --flake .
 - Starship prompt
 - Helix editor configuration
 
-### Homebrew Management
+### Homebrew (Minimal Usage)
 
-nix-darwin manages Homebrew declaratively:
+**Only for GUI applications** that are not available in nixpkgs:
 
-- **GUI applications** (casks): Browsers, IDEs, design tools, etc.
-- **Specialized CLI tools**: Cloud CLIs, version managers, etc.
+- Browsers, IDEs, design tools
+- macOS-specific GUI applications
+- **Zero CLI tools via Homebrew** - all CLI tools use Nix
 - Automatic cleanup of unlisted packages
 
 ## Managing packages
 
-Add packages to either:
-- `darwin-configuration.nix` for system-wide packages and Homebrew casks/brews
-- `home.nix` for user-specific packages
+### Nix-First Policy
+
+**Always prefer Nix over Homebrew:**
+
+1. **For CLI tools**: Add to `home.nix` packages list
+2. **For system packages**: Add to `darwin-configuration.nix` environment.systemPackages
+3. **For GUI apps**: Only use Homebrew casks in `darwin-configuration.nix` if unavailable in nixpkgs
 
 Then run `darwin-rebuild switch --flake .` to apply changes.
 
-### Migrating from Homebrew
+### Adding a new package
 
-If you're migrating from Homebrew:
-
-1. **CLI tools**: Most are available in nixpkgs and have been added to `home.nix`
-2. **GUI apps**: Managed via nix-darwin's Homebrew module in `darwin-configuration.nix`
-3. **Old Homebrew installations**: After applying the nix-darwin configuration, you can safely uninstall packages managed by nix-darwin:
-
-```bash
-# The configuration will automatically manage Homebrew
-# Packages not in the config will be removed with cleanup = "zap"
-darwin-rebuild switch --flake .
-```
-
-### Finding packages
-
-Search for Nix packages:
+**Step 1: Search for the package in nixpkgs**
 
 ```bash
 # Search nixpkgs
@@ -117,6 +126,48 @@ nix search nixpkgs <package-name>
 
 # Example
 nix search nixpkgs ripgrep
+```
+
+**Step 2: Add to the appropriate config file**
+
+For CLI tools (most common):
+```nix
+# home.nix
+packages = with pkgs; [
+  # ... existing packages
+  your-new-package
+];
+```
+
+For GUI apps (last resort):
+```nix
+# darwin-configuration.nix
+homebrew.casks = [
+  # ... existing casks
+  "your-gui-app"
+];
+```
+
+**Step 3: Apply changes**
+
+```bash
+darwin-rebuild switch --flake .
+```
+
+### Migrating from Homebrew
+
+If you're migrating from Homebrew:
+
+1. **CLI tools**: ✅ All migrated to Nix in `home.nix`
+2. **GUI apps**: Managed via Homebrew casks in `darwin-configuration.nix`
+3. **Cleanup**: Homebrew packages not in config are auto-removed with `cleanup = "zap"`
+
+```bash
+# Apply the configuration - this will manage both Nix and Homebrew
+darwin-rebuild switch --flake .
+
+# Optional: List what Homebrew still manages
+brew list --cask
 ```
 
 ## Troubleshooting

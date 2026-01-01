@@ -1,6 +1,13 @@
 { config, pkgs, ... }:
 
 {
+  # =============================================================================
+  # Home Manager Configuration - 100% Nix Managed
+  # =============================================================================
+  # ALL CLI tools, development tools, and programming languages are managed
+  # via Nix packages below. No Homebrew CLI tools are used.
+  # =============================================================================
+
   # Home Manager needs a bit of information about you and the paths it should manage
   home = {
     # You should update this to your username
@@ -119,6 +126,24 @@
 
       # Package managers & tools
       topgrade
+      poetry
+      pipx
+
+      # Cloud & Infrastructure
+      awscli2
+      azure-cli
+      google-cloud-sdk
+      firebase-tools
+      flyctl
+
+      # DevOps & CI/CD
+      circleci-cli
+
+      # Mobile development
+      cocoapods
+
+      # Dotfiles management
+      chezmoi
 
       # Utilities
       tldr
