@@ -1,0 +1,14 @@
+# Personal configuration template
+# Copy this file to personal.nix and fill in your own values
+# personal.nix is gitignored and won't be committed
+{
+  # System configuration
+  hostname = "your-hostname"; # Run: scutil --get ComputerName (macOS) or hostname (Linux)
+  username = "your-username"; # Run: whoami
+
+  # Git configuration
+  git = {
+    userName = "Your Name";
+    userEmail = "your.email@example.com";
+  };
+}

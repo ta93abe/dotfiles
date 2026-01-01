@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, personal, ... }:
 
 {
   # =============================================================================
@@ -203,8 +203,8 @@
   # Git configuration
   programs.git = {
     enable = true;
-    userName = "Your Name";
-    userEmail = "your.email@example.com";
+    userName = personal.git.userName;
+    userEmail = personal.git.userEmail;
 
     # Delta (シンタックスハイライト付きdiff)
     delta = {

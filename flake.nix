@@ -15,23 +15,28 @@
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, darwin, home-manager, ... }: {
-    darwinConfigurations = {
-      # Replace "your-hostname" with your actual hostname
-      # You can find it with: scutil --get ComputerName
-      "your-hostname" = darwin.lib.darwinSystem {
-        system = "aarch64-darwin"; # Use "x86_64-darwin" for Intel Macs
-        modules = [
-          ./darwin-configuration.nix
+  outputs = inputs@{ self, nixpkgs, darwin, home-manager, ... }:
+    let
+      # Import personal configuration
+      # Copy personal.nix.example to personal.nix and fill in your values
+      personal = import ./personal.nix;
+    in
+    {
+      darwinConfigurations = {
+        "${personal.hostname}" = darwin.lib.darwinSystem {
+          system = "aarch64-darwin"; # Use "x86_64-darwin" for Intel Macs
+          modules = [
+            ./darwin-configuration.nix
 
-          home-manager.darwinModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.your-username = import ./home.nix;
-          }
-        ];
+            home-manager.darwinModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.${personal.username} = import ./home.nix;
+              home-manager.extraSpecialArgs = { inherit personal; };
+            }
+          ];
+        };
       };
     };
-  };
 }

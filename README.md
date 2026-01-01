@@ -54,7 +54,14 @@ git clone https://github.com/your-username/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 ```
 
-### Step 3: Customize Configuration
+### Step 3: Create Personal Configuration
+
+**Create your personal configuration file:**
+
+```bash
+# Copy the template
+cp personal.nix.example personal.nix
+```
 
 **Get your system information:**
 
@@ -66,40 +73,28 @@ scutil --get ComputerName
 # Get your username
 whoami
 # Example output: "john"
-
-# Check your architecture
-uname -m
-# Output: "arm64" for Apple Silicon, "x86_64" for Intel
 ```
 
-**Edit `flake.nix`:**
+**Edit `personal.nix` with your information:**
 
 ```nix
-# Line 19-21: Update hostname and architecture
-darwinConfigurations = {
-  "your-hostname" = darwin.lib.darwinSystem {  # ← Change this
-    system = "aarch64-darwin";  # ← "x86_64-darwin" for Intel
-    # ...
+{
+  # System configuration
+  hostname = "MacBook-Pro";  # ← Your actual hostname
+  username = "john";         # ← Your actual username
+
+  # Git configuration
+  git = {
+    userName = "John Doe";              # ← Your name
+    userEmail = "john@example.com";     # ← Your email
+  };
+}
 ```
 
-```nix
-# Line 28: Update username
-home-manager.users.your-username = import ./home.nix;  # ← Change this
-```
-
-**Edit `home.nix`:**
-
-```nix
-# Line 14-15: Update username and home directory
-username = "your-username";  # ← Change this
-homeDirectory = "/Users/your-username";  # ← Change this
-```
-
-```nix
-# Line 156-157: Update Git config
-userName = "Your Name";  # ← Change this
-userEmail = "your.email@example.com";  # ← Change this
-```
+**Important Notes:**
+- `personal.nix` is gitignored and won't be committed
+- Keep `personal.nix.example` as a template for other machines
+- Update architecture in `flake.nix` line 27 if using Intel Mac (`x86_64-darwin`)
 
 ### Step 4: Initial Build & Apply
 
@@ -107,12 +102,16 @@ userEmail = "your.email@example.com";  # ← Change this
 
 ```bash
 # Build the configuration (this may take 10-30 minutes)
+# The hostname is read from your personal.nix file
+nix build .#darwinConfigurations.$(nix eval --raw .#darwinConfigurations --apply 'x: builtins.head (builtins.attrNames x)').system
+
+# Or simply use your hostname directly (from personal.nix)
 nix build .#darwinConfigurations.YOUR-HOSTNAME.system
 
 # Apply the configuration
 ./result/sw/bin/darwin-rebuild switch --flake .
 
-# Set fish as your default shell (if using fish)
+# Set fish as your default shell
 echo $(which fish) | sudo tee -a /etc/shells
 chsh -s $(which fish)
 ```
