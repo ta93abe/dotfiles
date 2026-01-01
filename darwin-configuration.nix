@@ -115,7 +115,7 @@
 
   # Programs
   programs = {
-    zsh.enable = true;
+    # Fish is configured in home-manager (home.nix)
   };
 
   # Services

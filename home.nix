@@ -60,7 +60,10 @@
 
       # Terminal & Shell
       zellij
+      fish
       starship
+      mcfly
+      direnv
 
       # Text processing
       jq
@@ -158,26 +161,17 @@
     };
   };
 
-  # Zsh configuration
-  programs.zsh = {
+  # Fish configuration
+  programs.fish = {
     enable = true;
-    enableCompletion = true;
-    syntaxHighlighting.enable = true;
 
-    shellAliases = {
+    shellAbbrs = {
       # Modern replacements
-      ls = "eza";
-      ll = "eza -l";
-      la = "eza -la";
       cat = "bat";
-      vim = "hx";
-      top = "btm"; # bottom
-      ps = "procs";
-      du = "dust";
-      find = "fd";
-      grep = "rg";
+      mkdir = "mkdir -p";
+      ls = "eza -la";
 
-      # Git aliases
+      # Git abbreviations
       g = "git";
       gs = "git status";
       ga = "git add";
@@ -185,22 +179,56 @@
       gp = "git push";
       gl = "git pull";
       gd = "git diff";
-
-      # Directory navigation
-      ".." = "cd ..";
-      "..." = "cd ../..";
     };
 
-    initExtra = ''
-      # Starship prompt
-      eval "$(starship init zsh)"
+    shellAliases = {
+      # Python
+      python = "python3";
 
-      # Zoxide (better cd)
-      eval "$(zoxide init zsh)"
+      # Modern CLI replacements
+      ll = "eza -l";
+      la = "eza -la";
+      vim = "hx";
+      top = "btm";
+      ps = "procs";
+      du = "dust";
+      find = "fd";
+      grep = "rg";
+    };
 
-      # fzf keybindings
-      source ${pkgs.fzf}/share/fzf/key-bindings.zsh
-      source ${pkgs.fzf}/share/fzf/completion.zsh
+    functions = {
+      # ghq + fzf repository selector
+      ghq_fzf_repo = ''
+        set selected_repository (ghq list -p | fzf --query "$argv")
+        if test -n "$selected_repository"
+          cd $selected_repository
+          commandline -f repaint
+        end
+      '';
+
+      # chezmoi utility
+      chezmoi-cd = ''
+        cd (chezmoi source-path)
+      '';
+
+      # Fish key bindings
+      fish_user_key_bindings = ''
+        bind \cf ghq_fzf_repo
+      '';
+    };
+
+    interactiveShellInit = ''
+      # Disable greeting
+      set fish_greeting
+
+      # Initialize tools
+      zoxide init fish | source
+      starship init fish | source
+      mcfly init fish | source
+      direnv hook fish | source
+
+      # fzf key bindings
+      set -gx FZF_DEFAULT_OPTS "--height 40% --reverse --border"
     '';
   };
 
