@@ -141,14 +141,36 @@
       spaces = {
         spans-displays = false; # Separate spaces per display
       };
+
+      # Custom macOS preferences
+      CustomUserPreferences = {
+        # Modifier keys remapping: Caps Lock → Command
+        "com.apple.keyboard.modifiermapping.1452-591-0" = [
+          {
+            HIDKeyboardModifierMappingDst = 30064771299;  # Command
+            HIDKeyboardModifierMappingSrc = 30064771129;  # Caps Lock
+          }
+        ];
+
+        # Input source switching: Option + Esc
+        "com.apple.symbolichotkeys" = {
+          AppleSymbolicHotKeys = {
+            # Select next source in Input menu
+            "61" = {
+              enabled = true;
+              value = {
+                parameters = [ 53 53 524288 ];  # Esc key (53) + Option (524288)
+                type = "standard";
+              };
+            };
+          };
+        };
+      };
     };
 
     # Keyboard settings
     keyboard = {
       enableKeyMapping = true;
-      # Remap modifier keys (optional)
-      # Example: Remap Caps Lock to Control
-      # remapCapsLockToControl = true;
     };
 
     # Auto-upgrade
