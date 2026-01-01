@@ -568,6 +568,121 @@
     unfocused-split-opacity = 0.9
   '';
 
+  # Zellij terminal multiplexer configuration
+  xdg.configFile."zellij/config.kdl".text = ''
+    // Theme: Tokyo Night
+    theme "tokyo-night"
+
+    themes {
+      tokyo-night {
+        fg "#c0caf5"
+        bg "#1a1b26"
+        black "#15161e"
+        red "#f7768e"
+        green "#9ece6a"
+        yellow "#e0af68"
+        blue "#7aa2f7"
+        magenta "#bb9af7"
+        cyan "#7dcfff"
+        white "#a9b1d6"
+        orange "#ff9e64"
+      }
+    }
+
+    // UI Configuration
+    simplified_ui true
+    pane_frames false
+    default_shell "fish"
+
+    // Mouse support
+    mouse_mode true
+    scroll_buffer_size 10000
+
+    // Copy mode
+    copy_on_select true
+    copy_command "pbcopy"
+
+    // Session configuration
+    default_layout "compact"
+
+    // Keybindings
+    keybinds {
+      normal {
+        // Pane management
+        bind "Ctrl p" { SwitchToMode "Pane"; }
+
+        // Tab management
+        bind "Ctrl t" { SwitchToMode "Tab"; }
+
+        // Resize mode
+        bind "Ctrl r" { SwitchToMode "Resize"; }
+
+        // Scroll mode
+        bind "Ctrl s" { SwitchToMode "Scroll"; }
+
+        // Session mode
+        bind "Ctrl o" { SwitchToMode "Session"; }
+
+        // Move mode
+        bind "Ctrl h" { SwitchToMode "Move"; }
+
+        // Quit
+        bind "Ctrl q" { Quit; }
+      }
+
+      pane {
+        // Split panes
+        bind "v" { NewPane "Right"; SwitchToMode "Normal"; }
+        bind "s" { NewPane "Down"; SwitchToMode "Normal"; }
+
+        // Navigate panes
+        bind "h" "Left" { MoveFocus "Left"; }
+        bind "l" "Right" { MoveFocus "Right"; }
+        bind "j" "Down" { MoveFocus "Down"; }
+        bind "k" "Up" { MoveFocus "Up"; }
+
+        // Close pane
+        bind "x" { CloseFocus; SwitchToMode "Normal"; }
+
+        // Fullscreen
+        bind "f" { ToggleFocusFullscreen; SwitchToMode "Normal"; }
+      }
+
+      tab {
+        // New tab
+        bind "n" { NewTab; SwitchToMode "Normal"; }
+
+        // Navigate tabs
+        bind "h" "Left" { GoToPreviousTab; }
+        bind "l" "Right" { GoToNextTab; }
+
+        // Close tab
+        bind "x" { CloseTab; SwitchToMode "Normal"; }
+
+        // Rename tab
+        bind "r" { SwitchToMode "RenameTab"; }
+      }
+
+      resize {
+        bind "h" "Left" { Resize "Increase Left"; }
+        bind "j" "Down" { Resize "Increase Down"; }
+        bind "k" "Up" { Resize "Increase Up"; }
+        bind "l" "Right" { Resize "Increase Right"; }
+        bind "=" { Resize "Increase"; }
+        bind "-" { Resize "Decrease"; }
+      }
+
+      scroll {
+        bind "e" { EditScrollback; SwitchToMode "Normal"; }
+        bind "/" { SwitchToMode "EnterSearch"; SearchInput 0; }
+        bind "j" "Down" { ScrollDown; }
+        bind "k" "Up" { ScrollUp; }
+        bind "d" { HalfPageScrollDown; }
+        bind "u" { HalfPageScrollUp; }
+      }
+    }
+  '';
+
   # Let Home Manager install and manage itself
   programs.home-manager.enable = true;
 }
