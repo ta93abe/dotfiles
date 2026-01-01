@@ -166,6 +166,7 @@
       # Package managers & tools
       topgrade
       uv # Modern Python package manager (replaces poetry/pipx)
+      pnpm # Fast, disk space efficient Node.js package manager
 
       # Cloud & Infrastructure
       awscli2
