@@ -90,6 +90,14 @@
         NSAutomaticPeriodSubstitutionEnabled = false;
         NSAutomaticQuoteSubstitutionEnabled = false;
         NSAutomaticSpellingCorrectionEnabled = false;
+
+        # Custom keyboard shortcuts
+        # Format: "Menu Item" = "Shortcut"
+        # Shortcuts use: @ = Command, ^ = Control, ~ = Option, $ = Shift
+        NSUserKeyEquivalents = {
+          # Global shortcuts
+          "Show Help menu" = "^~@/";
+        };
       };
 
       # Screenshot settings
@@ -133,6 +141,14 @@
       spaces = {
         spans-displays = false; # Separate spaces per display
       };
+    };
+
+    # Keyboard settings
+    keyboard = {
+      enableKeyMapping = true;
+      # Remap modifier keys (optional)
+      # Example: Remap Caps Lock to Control
+      # remapCapsLockToControl = true;
     };
 
     # Auto-upgrade
