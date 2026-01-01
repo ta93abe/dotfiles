@@ -91,6 +91,48 @@
         NSAutomaticQuoteSubstitutionEnabled = false;
         NSAutomaticSpellingCorrectionEnabled = false;
       };
+
+      # Screenshot settings
+      screencapture = {
+        location = "~/Documents";
+        type = "png";
+        disable-shadow = false;
+      };
+
+      # Trackpad settings
+      trackpad = {
+        Clicking = true; # Enable tap to click
+        TrackpadThreeFingerDrag = true; # Three finger drag
+      };
+
+      # Mouse settings
+      ".GlobalPreferences" = {
+        "com.apple.mouse.scaling" = 1.5;
+      };
+
+      # Menu bar settings
+      menuExtraClock = {
+        Show24Hour = true;
+        ShowDate = 1; # Always show date
+        ShowDayOfWeek = true;
+      };
+
+      # Login window settings
+      loginwindow = {
+        GuestEnabled = false; # Disable guest user
+        DisableConsoleAccess = true;
+      };
+
+      # Screen saver settings
+      screensaver = {
+        askForPassword = true;
+        askForPasswordDelay = 5; # seconds
+      };
+
+      # Spaces settings
+      spaces = {
+        spans-displays = false; # Separate spaces per display
+      };
     };
 
     # Auto-upgrade
