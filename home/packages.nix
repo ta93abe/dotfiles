@@ -46,7 +46,6 @@
     fish
     starship
     mcfly
-    direnv
 
     # Text processing
     jq
