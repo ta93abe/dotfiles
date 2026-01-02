@@ -31,7 +31,7 @@
     homeDirectory = "/Users/${personal.username}";
 
     # This value determines the Home Manager release that your configuration is compatible with
-    stateVersion = "24.05";
+    stateVersion = "24.11";
 
     # Environment variables
     sessionVariables = {

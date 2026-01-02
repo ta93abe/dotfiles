@@ -2,16 +2,11 @@
 
 {
   home.packages = with pkgs; [
-    # Editor
-    helix
-
     # Search & Navigation
     ripgrep
     ripgrep-all
     fd
-    fzf
     broot
-    zoxide
     ghq
 
     # File viewers & converters
@@ -27,7 +22,6 @@
 
     # Git tools
     gh
-    git-delta
     gitui
     tig
     git-interactive-rebase-tool
@@ -43,9 +37,6 @@
 
     # Terminal & Shell
     zellij
-    fish
-    starship
-    mcfly
 
     # Text processing
     jq

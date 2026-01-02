@@ -11,4 +11,12 @@
 
   # Example: Machine-specific system settings
   # system.defaults.dock.tilesize = 64;
+
+  # This assertion ensures the module is valid while keeping it empty
+  assertions = [
+    {
+      assertion = true;
+      message = "machines/000355-M.nix is intentionally kept without active configuration.";
+    }
+  ];
 }

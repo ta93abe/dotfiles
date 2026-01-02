@@ -2,6 +2,11 @@
 
 { system, hostname, username, modules ? [], overlays ? [] }:
 
+# NOTE: This function is not currently used in flake.nix, but is prepared
+# for future use when managing multiple machines with different configurations.
+# To use this function, update flake.nix to call mkSystem instead of
+# directly defining darwinSystem.
+
 darwin.lib.darwinSystem {
   inherit system;
 
@@ -26,9 +31,9 @@ darwin.lib.darwinSystem {
       home-manager.useUserPackages = true;
       home-manager.users.${username} = import ../home.nix;
       home-manager.extraSpecialArgs = {
-        personal = {
+        # Merge personal.nix with hostname/username to create complete personal object
+        personal = (import ../personal.nix) // {
           inherit hostname username;
-          git = import ../personal.nix;
         };
       };
     }

@@ -2,8 +2,8 @@
   description = "Darwin system configuration";
 
   inputs = {
-    # Stable nixpkgs
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
+    # Stable nixpkgs (darwin-specific channel)
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-24.11-darwin";
 
     # Unstable nixpkgs for latest packages
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
@@ -45,8 +45,11 @@
           };
 
           modules = [
-            # Apply overlays
-            { nixpkgs.overlays = overlays; }
+            # Apply overlays and allow unfree packages
+            {
+              nixpkgs.overlays = overlays;
+              nixpkgs.config.allowUnfree = true;
+            }
 
             # Machine-specific configuration
             (./machines + "/${personal.hostname}.nix")
