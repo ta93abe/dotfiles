@@ -10,9 +10,8 @@
 
   # Home Manager needs a bit of information about you and the paths it should manage
   home = {
-    # You should update this to your username
-    username = "your-username";
-    homeDirectory = "/Users/your-username";
+    username = personal.username;
+    homeDirectory = "/Users/${personal.username}";
 
     # This value determines the Home Manager release that your configuration is compatible with
     stateVersion = "24.05";
@@ -77,7 +76,6 @@
 
       # HTTP clients
       xh
-      curl
 
       # Network tools
       dog
@@ -146,9 +144,6 @@
       ffmpeg
       gifski
       silicon
-
-      # Data & Formats
-      protobuf
 
       # Languages
       nodejs
@@ -327,12 +322,6 @@
     interactiveShellInit = ''
       # Disable greeting
       set fish_greeting
-
-      # Initialize tools
-      zoxide init fish | source
-      starship init fish | source
-      mcfly init fish | source
-      direnv hook fish | source
     '';
   };
 
@@ -379,9 +368,29 @@
     ];
   };
 
+  # Zoxide configuration
+  programs.zoxide = {
+    enable = true;
+    enableFishIntegration = true;
+  };
+
+  # McFly configuration
+  programs.mcfly = {
+    enable = true;
+    enableFishIntegration = true;
+  };
+
+  # Direnv configuration
+  programs.direnv = {
+    enable = true;
+    enableFishIntegration = true;
+    nix-direnv.enable = true;
+  };
+
   # Starship prompt
   programs.starship = {
     enable = true;
+    enableFishIntegration = true;
     settings = {
       add_newline = true;
 

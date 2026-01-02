@@ -2,9 +2,6 @@
 result
 result-*
 
-# Nix flake lock file (comment out if you want to commit it)
-# flake.lock
-
 # Personal configuration (contains sensitive information)
 personal.nix
 

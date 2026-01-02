@@ -228,7 +228,6 @@
       "iterm2"
       "warp"
       "wezterm"
-      "docker"
       "github"
       "gitkraken"
       "tower"
@@ -325,6 +324,4 @@
     # Homebrew is used ONLY for GUI applications (casks) that are not available in nixpkgs
   };
 
-  # Used for backwards compatibility
-  system.stateVersion = 5;
 }
