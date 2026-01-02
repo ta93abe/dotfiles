@@ -245,10 +245,11 @@
     # Git aliases
     aliases = {
       st = "status";
-      co = "checkout";
+      sw = "switch";
+      rs = "restore";
       br = "branch";
       ci = "commit";
-      unstage = "reset HEAD --";
+      unstage = "restore --staged";
       last = "log -1 HEAD";
       lg = "log --graph --oneline --decorate --all";
       amend = "commit --amend --no-edit";
@@ -521,7 +522,7 @@
   # Ghostty terminal configuration
   xdg.configFile."ghostty/config".text = ''
     # Font configuration
-    font-family = HackGen35Nerd Console
+    font-family = JetBrainsMono Nerd Font
     font-size = 14
     font-thicken = true
 

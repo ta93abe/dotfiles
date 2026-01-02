@@ -193,11 +193,6 @@
     })
   ];
 
-  # Programs
-  programs = {
-    # Fish is configured in home-manager (home.nix)
-  };
-
   # Services
   services = {
     nix-daemon.enable = true;
@@ -212,7 +207,7 @@
     onActivation = {
       autoUpdate = true;
       upgrade = true;
-      cleanup = "zap"; # Uninstall packages not listed in configuration
+      cleanup = "uninstall"; # Safely uninstall packages not listed in configuration
     };
 
     # Install GUI applications via Homebrew Cask
