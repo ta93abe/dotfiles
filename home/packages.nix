@@ -114,6 +114,7 @@
 
     # Build & Development
     act # GitHub Actions locally
+    devenv # Modern development environment tool
 
     # Benchmarking
     hyperfine
