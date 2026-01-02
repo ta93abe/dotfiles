@@ -249,7 +249,7 @@
       rs = "restore";
       br = "branch";
       ci = "commit";
-      unstage = "reset HEAD --";
+      unstage = "restore --staged";
       last = "log -1 HEAD";
       lg = "log --graph --oneline --decorate --all";
       amend = "commit --amend --no-edit";
