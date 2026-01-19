@@ -1,5 +1,12 @@
 { config, pkgs, lib, ... }:
 
+# TODO: このファイルは長大なため、将来的に以下のように分割を検討:
+# - claude/settings.nix (グローバル設定)
+# - claude/commands.nix (カスタムコマンド)
+# - claude/skills.nix (カスタムスキル)
+# - claude/agents/ (エージェントをカテゴリごとに分割)
+# See: Linear issue for tracking
+
 {
   # Claude Code configuration managed by Nix
   # Runtime data (cache, history, debug, etc.) is not managed - only declarative configs
@@ -83,7 +90,7 @@
 
     ## 注意
 
-    - Codex CLIがインストールされている必要があります (`npm i -g @openai/codex`)
+    - Codex CLIが必要です（`home/packages.nix`に追加済み、または`nix run nixpkgs#openai-codex`で実行可能）
     - OpenAI APIキーが設定されている必要があります
   '';
 
@@ -181,7 +188,7 @@
 
     ## 注意事項
 
-    - Gemini CLIがインストールされている必要があります (`brew install gemini`)
+    - Gemini CLIが必要です（`home/packages.nix`に追加、または`nix run nixpkgs#gemini-cli`で実行可能）
     - API利用料が発生する場合があります
     - 回答はあくまで参考として、最終判断は自分で行ってください
   '';
@@ -220,7 +227,7 @@
 
     ## 注意事項
 
-    - Codex CLIがインストールされている必要があります (`npm i -g @openai/codex`)
+    - Codex CLIが必要です（`home/packages.nix`に追加、または`nix run nixpkgs#openai-codex`で実行可能）
     - OpenAI APIキーが設定されている必要があります
   '';
 

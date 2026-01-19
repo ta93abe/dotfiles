@@ -16,8 +16,8 @@ cd ~/.dotfiles
 cp personal.nix.example personal.nix
 # personal.nix を編集（hostname, username, git設定）
 
-# 4. 適用（初回）
-sudo nix run nix-darwin -- switch --flake .
+# 4. 適用
+nix run .#switch
 
 # 5. Fishをデフォルトシェルに
 echo $(which fish) | sudo tee -a /etc/shells
