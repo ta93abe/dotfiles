@@ -25,6 +25,12 @@
       # Copy personal.nix.example to personal.nix and fill in your values
       personal = import ./personal.nix;
 
+      # System architecture
+      system = "aarch64-darwin"; # Use "x86_64-darwin" for Intel Macs
+
+      # Packages for scripts
+      pkgs = import nixpkgs { inherit system; };
+
       # Overlays to access unstable packages
       overlays = [
         (final: prev: {
@@ -36,9 +42,12 @@
       ];
     in
     {
+      # ==========================================================================
+      # Darwin Configurations
+      # ==========================================================================
       darwinConfigurations = {
         "${personal.hostname}" = darwin.lib.darwinSystem {
-          system = "aarch64-darwin"; # Use "x86_64-darwin" for Intel Macs
+          inherit system;
 
           specialArgs = {
             inherit personal;
@@ -67,6 +76,52 @@
             }
           ];
         };
+      };
+
+      # ==========================================================================
+      # Apps - Simplified commands
+      # ==========================================================================
+      # Usage:
+      #   nix run .#switch  - Build and apply configuration
+      #   nix run .#build   - Build only (test)
+      #   nix run .#update  - Update flake inputs
+      # ==========================================================================
+      apps.${system} = {
+        # Build and switch to new configuration
+        switch = {
+          type = "app";
+          program = toString (pkgs.writeShellScript "darwin-switch" ''
+            set -e
+            echo "🔄 Building and switching to new configuration..."
+            sudo ${darwin.packages.${system}.darwin-rebuild}/bin/darwin-rebuild switch --flake .#${personal.hostname}
+            echo "✅ Done!"
+          '');
+        };
+
+        # Build only (for testing)
+        build = {
+          type = "app";
+          program = toString (pkgs.writeShellScript "darwin-build" ''
+            set -e
+            echo "🔨 Building configuration..."
+            nix build .#darwinConfigurations.${personal.hostname}.system
+            echo "✅ Build successful! Run 'nix run .#switch' to apply."
+          '');
+        };
+
+        # Update flake inputs
+        update = {
+          type = "app";
+          program = toString (pkgs.writeShellScript "flake-update" ''
+            set -e
+            echo "📦 Updating flake inputs..."
+            nix flake update
+            echo "✅ Done! Run 'nix run .#switch' to apply changes."
+          '');
+        };
+
+        # Default app is switch
+        default = self.apps.${system}.switch;
       };
     };
 }
