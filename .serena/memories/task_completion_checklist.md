@@ -4,13 +4,13 @@
 
 ### 1. ビルドの確認
 ```bash
-darwin-rebuild build --flake .
+nix run .#build
 ```
 - エラーがないことを確認
 
 ### 2. 設定の適用（テスト環境）
 ```bash
-darwin-rebuild switch --flake .
+nix run .#switch
 ```
 - 変更が正しく適用されることを確認
 
@@ -35,14 +35,17 @@ git diff
 
 ## PRを作成する場合
 
-### 1. ブランチを作成
+### 1. コードを書いてからブランチ作成+コミット
 ```bash
-git checkout -b feature/機能名
+gt create -m "feat: 機能の説明"
 ```
+- Graphite (gt) を使用してブランチ作成とコミットを同時に行う
 
-### 2. コミット
-- 明確で簡潔なコミットメッセージ
-- 1つの変更につき1つのコミット推奨
+### 2. PRの提出
+```bash
+gt submit --no-interactive
+```
+- スタック全体をGraphiteに提出
 
 ### 3. PRの説明
 - 何を変更したか

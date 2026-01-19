@@ -5,21 +5,21 @@
 ### 設定の適用
 ```bash
 # .nixファイルを編集した後
-darwin-rebuild switch --flake .
+nix run .#switch
 ```
 
 ### パッケージの更新
 ```bash
 # flake inputsを更新
-nix flake update
+nix run .#update
 
 # 更新されたパッケージでリビルド
-darwin-rebuild switch --flake .
+nix run .#switch
 ```
 
 ### 適用せずにビルドのみ（テスト）
 ```bash
-darwin-rebuild build --flake .
+nix run .#build
 ```
 
 ## パッケージ検索
@@ -71,17 +71,20 @@ nix path-info -rsSh /run/current-system | sort -k2 -h
 ### フレッシュな状態にリセット
 ```bash
 sudo nix-collect-garbage -d
-darwin-rebuild switch --flake . --recreate-lock-file
+nix run .#switch
 ```
 
-## Git操作
+## Graphite (gt) 操作
 
 ```bash
-git status
-git diff
-git add .
-git commit -m "メッセージ"
-git push
+# ブランチ作成とコミット
+gt create -m "feat: 新機能の追加"
+
+# PRの提出
+gt submit --no-interactive
+
+# スタックの同期
+gt sync
 ```
 
 ## シェル関連

@@ -47,9 +47,9 @@ dotfiles/
 
 | コマンド | 説明 |
 |---------|------|
-| `darwin-rebuild switch --flake .` | 設定を適用 |
-| `darwin-rebuild build --flake .` | ビルドのみ（テスト） |
-| `nix flake update` | パッケージを更新 |
+| `nix run .#switch` | 設定を適用 |
+| `nix run .#build` | ビルドのみ（テスト） |
+| `nix run .#update` | パッケージを更新 |
 | `darwin-rebuild rollback` | 前の世代に戻す |
 | `nix search nixpkgs <name>` | パッケージを検索 |
 
@@ -138,8 +138,8 @@ Conventional Commits に従う:
 
 ## タスク完了時チェックリスト
 
-1. `darwin-rebuild build --flake .` でビルド確認
-2. `darwin-rebuild switch --flake .` で設定適用
+1. `nix run .#build` でビルド確認
+2. `nix run .#switch` で設定適用
 3. 動作確認
 4. `gt create -m "type: 説明"` でコミット
 5. `gt submit --no-interactive` でPR作成

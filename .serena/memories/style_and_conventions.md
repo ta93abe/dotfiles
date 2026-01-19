@@ -58,11 +58,13 @@
 - Homebrew経由でのCLIツールのインストール
 - 直接的なHomebrewコマンドでのパッケージ管理
 
-## テーマ統一
+## テーマ
 
-すべてのツールは **Tokyo Night** テーマで統一：
+### Tokyo Night
 - Ghostty
 - fzf
 - Zellij
+
+### Monokai
 - Starship（カスタムプロンプト🎣）
-- Helix: Monokaiテーマ
+- Helix
