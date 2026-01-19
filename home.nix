@@ -20,6 +20,7 @@
     ./home/programs/fzf.nix
     ./home/programs/zoxide.nix
     ./home/programs/mcfly.nix
+    ./home/programs/claude.nix
 
     # XDG configurations (Ghostty, Zellij)
     ./home/xdg.nix
