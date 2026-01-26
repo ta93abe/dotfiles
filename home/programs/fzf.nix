@@ -1,5 +1,13 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
+let
+  isDarwin = pkgs.stdenv.isDarwin;
+
+  # Platform-specific clipboard command
+  copyCommand = if isDarwin then "pbcopy"
+    else if builtins.getEnv "WAYLAND_DISPLAY" != "" then "wl-copy"
+    else "xclip -selection clipboard";
+in
 {
   programs.fzf = {
     enable = true;
@@ -39,7 +47,7 @@
       "--bind 'ctrl-u:preview-half-page-up'"
       "--bind 'ctrl-d:preview-half-page-down'"
       "--bind 'ctrl-a:select-all'"
-      "--bind 'ctrl-y:execute-silent(echo {+} | pbcopy)'"
+      "--bind 'ctrl-y:execute-silent(echo {+} | ${copyCommand})'"
     ];
   };
 }

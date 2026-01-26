@@ -1,7 +1,11 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
-{
-  home.packages = with pkgs; [
+let
+  isDarwin = pkgs.stdenv.isDarwin;
+  isLinux = pkgs.stdenv.isLinux;
+
+  # Common packages for all platforms
+  commonPackages = with pkgs; [
     # Search & Navigation
     ripgrep
     ripgrep-all
@@ -148,9 +152,6 @@
     # DevOps & CI/CD
     circleci-cli
 
-    # Mobile development
-    cocoapods
-
     # Utilities
     tldr
     neofetch
@@ -160,4 +161,54 @@
     # Other
     ko
   ];
+
+  # macOS-specific packages
+  darwinPackages = with pkgs; [
+    # Mobile development (iOS)
+    cocoapods
+  ];
+
+  # Linux-specific packages
+  linuxPackages = with pkgs; [
+    # Clipboard utilities (required for fzf, zellij)
+    xclip
+    wl-clipboard
+
+    # System utilities
+    inotify-tools
+    lsof
+    strace
+    ltrace
+
+    # Hardware info
+    pciutils
+    usbutils
+    dmidecode
+
+    # Network
+    iproute2
+    iptables
+    ethtool
+    tcpdump
+
+    # Desktop integration (for GUI environments)
+    xdg-utils
+    desktop-file-utils
+
+    # Fonts utilities
+    fontconfig
+
+    # Process management
+    htop
+    iotop
+
+    # Filesystem
+    ncdu
+    duf
+  ];
+in
+{
+  home.packages = commonPackages
+    ++ lib.optionals isDarwin darwinPackages
+    ++ lib.optionals isLinux linuxPackages;
 }
