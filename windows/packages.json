@@ -1,0 +1,67 @@
+{
+  "$schema": "https://aka.ms/winget-packages.schema.2.0.json",
+  "CreationDate": "2025-01-26",
+  "Sources": [
+    {
+      "Packages": [
+        { "PackageIdentifier": "Google.Chrome" },
+        { "PackageIdentifier": "Mozilla.Firefox" },
+        { "PackageIdentifier": "Vivaldi.Vivaldi" },
+        { "PackageIdentifier": "Opera.OperaGX" },
+
+        { "PackageIdentifier": "Microsoft.VisualStudioCode" },
+        { "PackageIdentifier": "Microsoft.WindowsTerminal" },
+        { "PackageIdentifier": "GitHub.GitHubDesktop" },
+        { "PackageIdentifier": "Axosoft.GitKraken" },
+        { "PackageIdentifier": "Postman.Postman" },
+        { "PackageIdentifier": "WiresharkFoundation.Wireshark" },
+
+        { "PackageIdentifier": "Figma.Figma" },
+        { "PackageIdentifier": "Canva.Canva" },
+        { "PackageIdentifier": "Miro.Miro" },
+        { "PackageIdentifier": "BlenderFoundation.Blender" },
+        { "PackageIdentifier": "UnityTechnologies.UnityHub" },
+
+        { "PackageIdentifier": "Zoom.Zoom" },
+        { "PackageIdentifier": "Microsoft.Teams" },
+        { "PackageIdentifier": "SlackTechnologies.Slack" },
+        { "PackageIdentifier": "Discord.Discord" },
+
+        { "PackageIdentifier": "Obsidian.Obsidian" },
+        { "PackageIdentifier": "Typora.Typora" },
+        { "PackageIdentifier": "Notion.Notion" },
+
+        { "PackageIdentifier": "Spotify.Spotify" },
+        { "PackageIdentifier": "Valve.Steam" },
+        { "PackageIdentifier": "EpicGames.EpicGamesLauncher" },
+        { "PackageIdentifier": "GOG.Galaxy" },
+        { "PackageIdentifier": "Twitch.Twitch" },
+
+        { "PackageIdentifier": "Docker.DockerDesktop" },
+        { "PackageIdentifier": "Hashicorp.Terraform" },
+        { "PackageIdentifier": "Hashicorp.Vagrant" },
+        { "PackageIdentifier": "Microsoft.PowerShell" },
+
+        { "PackageIdentifier": "Git.Git" },
+        { "PackageIdentifier": "GitHub.cli" },
+        { "PackageIdentifier": "sharkdp.fd" },
+        { "PackageIdentifier": "BurntSushi.ripgrep.MSVC" },
+        { "PackageIdentifier": "sharkdp.bat" },
+        { "PackageIdentifier": "junegunn.fzf" },
+        { "PackageIdentifier": "ajeetdsouza.zoxide" },
+
+        { "PackageIdentifier": "Adobe.Acrobat.Reader.64-bit" },
+        { "PackageIdentifier": "Google.JapaneseIME" },
+        { "PackageIdentifier": "7zip.7zip" },
+        { "PackageIdentifier": "VideoLAN.VLC" }
+      ],
+      "SourceDetails": {
+        "Argument": "https://cdn.winget.microsoft.com/cache",
+        "Identifier": "Microsoft.Winget.Source_8wekyb3d8bbwe",
+        "Name": "winget",
+        "Type": "Microsoft.PreIndexed.Package"
+      }
+    }
+  ],
+  "WinGetVersion": "1.7.0"
+}

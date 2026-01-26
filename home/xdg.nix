@@ -1,5 +1,14 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
+let
+  isDarwin = pkgs.stdenv.isDarwin;
+  isLinux = pkgs.stdenv.isLinux;
+
+  # Platform-specific clipboard command
+  copyCommand = if isDarwin then "pbcopy"
+    else if builtins.getEnv "WAYLAND_DISPLAY" != "" then "wl-copy"
+    else "xclip -selection clipboard";
+in
 {
   # Ghostty terminal configuration
   xdg.configFile."ghostty/config".text = ''
@@ -92,7 +101,7 @@
 
     // Copy mode
     copy_on_select true
-    copy_command "pbcopy"
+    copy_command "${copyCommand}"
 
     // Session configuration
     default_layout "compact"
