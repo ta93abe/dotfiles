@@ -1,6 +1,6 @@
 # dotfiles
 
-nix-darwin と home-manager で管理するmacOS用dotfiles。Nix-Firstアプローチで宣言的・再現可能な開発環境を構築。
+nix-darwin と home-manager で管理するマルチプラットフォーム対応dotfiles。Nix-Firstアプローチで宣言的・再現可能な開発環境を構築。
 
 ## 技術スタック
 
@@ -13,7 +13,7 @@ nix-darwin と home-manager で管理するmacOS用dotfiles。Nix-Firstアプロ
 | シェル | Fish |
 | エディタ | Helix |
 | ターミナル | Ghostty |
-| テーマ | Tokyo Night |
+| テーマ | Monokai |
 | Issue管理 | Linear (ta93abe team / dotfiles project) |
 | PR管理 | Graphite (gt CLI) |
 
@@ -45,12 +45,24 @@ dotfiles/
 
 ## 開発コマンド
 
+### プラットフォーム別コマンド
+
+| プラットフォーム | コマンド | 説明 |
+|----------------|---------|------|
+| **macOS** | `nix run .#switch` | Darwin設定を適用 |
+| | `nix run .#build` | Darwinビルドのみ（テスト） |
+| **Linux/WSL2** | `nix run .#switch-home` | Home Manager設定を適用 |
+| | `nix run .#build-home` | Home Managerビルドのみ（テスト） |
+| **NixOS** | `nix run .#switch-nixos` | NixOS設定を適用（未構成） |
+| | `nix run .#build-nixos` | NixOSビルドのみ（未構成） |
+
+### 共通コマンド
+
 | コマンド | 説明 |
 |---------|------|
-| `nix run .#switch` | 設定を適用 |
-| `nix run .#build` | ビルドのみ（テスト） |
 | `nix run .#update` | パッケージを更新 |
-| `darwin-rebuild rollback` | 前の世代に戻す |
+| `nix run .#list` | 全設定一覧表示 |
+| `darwin-rebuild rollback` | 前の世代に戻す（macOS） |
 | `nix search nixpkgs <name>` | パッケージを検索 |
 
 ## ワークフローツール

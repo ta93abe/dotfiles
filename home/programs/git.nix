@@ -69,7 +69,6 @@
       "*.swp"
       "*.swo"
       "*~"
-      ".vscode/"
       ".idea/"
       "node_modules/"
       "__pycache__/"
