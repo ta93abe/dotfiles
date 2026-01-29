@@ -13,49 +13,35 @@
       cleanup = "uninstall"; # Safely uninstall packages not listed in configuration
     };
 
+    # CLI tools not available in nixpkgs
+    brews = [
+      "tenv"  # Terraform/OpenTofu version manager
+    ];
+
     # Install GUI applications via Homebrew Cask
     casks = [
       # Browsers
       "google-chrome"
       "firefox"
-      "vivaldi"
-      "opera-gx"
-      "min"
+      "brave-browser"
+      "arc"
+      "thebrowsercompany-dia"
 
       # Development tools
-      "iterm2"
-      "warp"
-      "wezterm"
-      "github"
-      "gitkraken"
-      "tower"
-      "postman"
-      "paw"
-      "popsql"
-      "azure-data-studio"
       "wireshark"
 
       # Design & Creative
       "figma"
-      "abstract"
-      "canva"
-      "miro"
-      "origami-studio"
-      "protopie"
       "blender"
       "unity-hub"
 
       # Communication
       "zoom"
-      "microsoft-teams"
-      "asana"
       "linear-linear"
 
       # Productivity
       "raycast"
       "obsidian"
-      "typora"
-      "dynalist"
       "numi"
       "alt-tab"
       "karabiner-elements"
@@ -65,50 +51,24 @@
       # Media & Entertainment
       "spotify"
       "kap"
-      "descript"
       "steam"
       "epic-games"
       "gog-galaxy"
       "twitch"
 
-      # Cloud & Database tools
-      "confluent-cli"
-      "redis-stack"
-      "redis-stack-server"
-      "redis-stack-redisinsight"
-
       # Programming environments
       "flutter"
-      "anaconda"
-      "rstudio"
-      "qt-creator"
-      "qt3dstudio"
-      "neovide"
-      "nteract"
 
       # Music & Audio
       "sonic-pi"
       "supercollider"
       "cycling74-max"
       "splice"
-      "spark-ar-studio"
 
       # Other utilities
       "adobe-acrobat-reader"
       "google-japanese-ime"
-      "mactex"
-      "vagrant"
-      "powershell"
-      "owasp-zap"
-      "authy"
-      "session"
-      "brewlet"
-      "around"
-      "tableau"
-      "tableau-prep"
-      "storyboarder"
       "openframeworks"
-      "git-credential-manager-core"
     ];
 
     # Additional taps (repositories)
