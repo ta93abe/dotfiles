@@ -11,8 +11,8 @@ macOS、Linux（NixOS / 非NixOS）、WSL2 に対応した宣言的・再現可�
 | macOS (Apple Silicon) | nix-darwin + home-manager | ✅ |
 | macOS (Intel) | nix-darwin + home-manager | ✅ |
 | Linux (NixOS) | NixOS + home-manager | 🚧 テンプレート |
-| Linux (非NixOS) | standalone home-manager | 🚧 テンプレート |
-| WSL2 | standalone home-manager | 🚧 テンプレート |
+| Ubuntu | standalone home-manager | ✅ |
+| WSL2 | standalone home-manager | ✅ |
 | Windows | winget | ✅ |
 
 ---
@@ -41,7 +41,7 @@ echo $(which fish) | sudo tee -a /etc/shells
 chsh -s $(which fish)
 ```
 
-### Linux（非NixOS / WSL2）
+### Linux（Ubuntu / WSL2）
 
 ```bash
 # 1. Nixをインストール
@@ -54,14 +54,12 @@ cd ~/.dotfiles
 # 3. 個人設定を作成
 cp personal.nix.example personal.nix
 vim personal.nix  # hostname, username を編集
+# WSL2の場合: isWSL = true; を追加
 
-# 4. flake.nixのhomeConfigurationsを有効化して設定
-# （コメントアウトを解除し、自分の設定を追加）
+# 4. 適用
+nix run .#switch-home
 
-# 5. 適用
-home-manager switch --flake .#username@hostname
-
-# 6. Fishをデフォルトシェルに設定
+# 5. Fishをデフォルトシェルに設定
 echo $(which fish) | sudo tee -a /etc/shells
 chsh -s $(which fish)
 ```
@@ -116,22 +114,24 @@ cd dotfiles\windows
 nix run .#switch   # 設定を適用
 nix run .#build    # ビルドのみ（テスト）
 nix run .#update   # flake inputsを更新
+nix run .#list     # 全設定一覧表示
+```
+
+### Linux（Ubuntu / WSL2）
+
+```bash
+nix run .#switch-home   # 設定を適用
+nix run .#build-home    # ビルドのみ（テスト）
+nix run .#update        # flake inputsを更新
+nix run .#list          # 全設定一覧表示
 ```
 
 ### Linux（NixOS）
 
 ```bash
-sudo nixos-rebuild switch --flake .#hostname
-sudo nixos-rebuild build --flake .#hostname  # テスト
-nix flake update                              # 更新
-```
-
-### Linux（非NixOS / WSL2）
-
-```bash
-home-manager switch --flake .#username@hostname
-home-manager build --flake .#username@hostname  # テスト
-nix flake update                                 # 更新
+nix run .#switch-nixos  # 設定を適用（要設定）
+nix run .#build-nixos   # ビルドのみ（要設定）
+nix run .#update        # flake inputsを更新
 ```
 
 ### ロールバック
@@ -184,11 +184,13 @@ dotfiles/
 │
 ├── machines/
 │   ├── darwin/                 # macOSマシン固有設定
-│   │   └── 000355-M.nix
+│   │   └── ta93abe.nix
 │   ├── nixos/                  # NixOSマシン固有設定
 │   │   └── example.nix
 │   └── linux/                  # 非NixOS Linux設定
-│       └── example.nix
+│       ├── example.nix
+│       ├── ubuntu.nix          # Ubuntu固有設定
+│       └── wsl2.nix            # WSL2固有設定
 │
 ├── lib/                        # ヘルパー関数
 │   ├── default.nix
@@ -226,8 +228,8 @@ nix search nixpkgs <package>
 #    Linux専用: home/packages.nix の linuxPackages
 
 # 3. 適用
-nix run .#switch  # macOS
-home-manager switch --flake .#user@host  # Linux
+nix run .#switch       # macOS
+nix run .#switch-home  # Linux/WSL2
 ```
 
 ### GUIアプリの追加（macOS）
@@ -279,12 +281,9 @@ winget search <name>
 
 ## テーマ
 
-**Tokyo Night** で統一:
+**Monokai** で統一:
 - Ghostty（ターミナル）
-- fzf（ファジーファインダー）
 - Zellij（ターミナルマルチプレクサ）
-
-**Monokai**:
 - Starship（プロンプト）
 - Helix（エディタ）
 
@@ -313,7 +312,8 @@ home-manager expire-generations "-30 days"
 
 ```bash
 # 詳細なエラー表示
-nix run .#build 2>&1 | less
+nix run .#build 2>&1 | less       # macOS
+nix run .#build-home 2>&1 | less  # Linux/WSL2
 
 # 特定パッケージのビルド
 nix build nixpkgs#<package> --show-trace
@@ -348,10 +348,13 @@ wsl --shutdown
 2. `hardware-configuration.nix` をインポート
 3. `flake.nix` の `nixosConfigurations` に追加
 
-### 非NixOS Linux / WSL2
+### Ubuntu / WSL2
+
+既存の設定（`ubuntu.nix`, `wsl2.nix`）を使用するか、カスタム設定を追加：
 
 1. `machines/linux/<hostname>.nix` を作成（オプション）
 2. `flake.nix` の `homeConfigurations` に追加
+3. WSL2の場合は `personal.nix` に `isWSL = true;` を設定
 
 ---
 

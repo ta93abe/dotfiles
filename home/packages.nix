@@ -1,14 +1,18 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, isWSL ? false, ... }:
 
 let
   isDarwin = pkgs.stdenv.isDarwin;
   isLinux = pkgs.stdenv.isLinux;
 
+  # Packages that don't work in WSL2 (no Wayland, no X11 by default)
+  wslExcludePackages = [
+    "wl-clipboard"  # Wayland clipboard - not available in WSL2
+  ];
+
   # Common packages for all platforms
   commonPackages = with pkgs; [
     # Search & Navigation
-    ripgrep
-    ripgrep-all
+    ripgrep-all  # includes ripgrep functionality
     fd
     broot
     ghq
@@ -19,23 +23,20 @@ let
     viu
 
     # File management
-    eza
-    tree
+    eza  # includes tree functionality (eza --tree)
     dust
     choose
 
     # Git tools
     gh
-    gitui
-    tig
+    lazygit  # primary Git TUI
     git-interactive-rebase-tool
     onefetch
     lefthook
     pre-commit
 
     # System monitoring
-    bottom
-    procs
+    bottom  # includes process viewer
     bandwhich
     gping
 
@@ -62,10 +63,7 @@ let
     httpstat
 
     # Database tools
-    usql
-    pgcli
-    mycli
-    litecli
+    usql  # universal SQL client (supports PostgreSQL, MySQL, SQLite, etc.)
 
     # Shell tools
     shellcheck
@@ -107,6 +105,15 @@ let
     # Performance
     samply
 
+    # AI Coding Agents
+    claude-code    # Claude Code CLI (from claude-code-overlay)
+    codex          # OpenAI Codex CLI (from llm-agents)
+    opencode       # OpenCode CLI (from llm-agents)
+    amp            # Amp CLI (from llm-agents)
+    gemini-cli     # Google Gemini CLI (from llm-agents)
+    copilot-cli    # GitHub Copilot CLI (from llm-agents)
+    coderabbit-cli # CodeRabbit CLI (from llm-agents)
+
     # Build & Development
     act # GitHub Actions locally
     devenv # Modern development environment tool
@@ -124,18 +131,9 @@ let
     gifski
     silicon
 
-    # Languages
-    nodejs
-    python310
+    # Languages (nodejs/python managed via pnpm/uv)
     rustup
     go
-    zig
-    nim
-    julia
-    ocaml
-    opam
-    erlang
-    elixir
 
     # Package managers & tools
     topgrade
@@ -148,9 +146,6 @@ let
     google-cloud-sdk
     firebase-tools
     flyctl
-
-    # DevOps & CI/CD
-    circleci-cli
 
     # Utilities
     tldr
@@ -169,10 +164,9 @@ let
   ];
 
   # Linux-specific packages
-  linuxPackages = with pkgs; [
+  linuxPackagesBase = with pkgs; [
     # Clipboard utilities (required for fzf, zellij)
     xclip
-    wl-clipboard
 
     # System utilities
     inotify-tools
@@ -206,6 +200,15 @@ let
     ncdu
     duf
   ];
+
+  # Packages only for non-WSL Linux (require Wayland/X11)
+  linuxDesktopPackages = with pkgs; [
+    wl-clipboard  # Wayland clipboard
+  ];
+
+  # Combined Linux packages with WSL filtering
+  linuxPackages = linuxPackagesBase
+    ++ lib.optionals (!isWSL) linuxDesktopPackages;
 in
 {
   home.packages = commonPackages

@@ -2,8 +2,12 @@
 # Used for non-NixOS Linux systems and WSL2
 { home-manager, nixpkgs, lib }:
 
-{ system, personal, overlays ? [] }:
+{ system, personal, overlays ? [], extraModules ? [] }:
 
+let
+  # Determine if this is a WSL2 environment
+  isWSL = personal.isWSL or false;
+in
 home-manager.lib.homeManagerConfiguration {
   pkgs = import nixpkgs {
     inherit system;
@@ -12,14 +16,10 @@ home-manager.lib.homeManagerConfiguration {
   };
 
   extraSpecialArgs = {
-    inherit personal;
+    inherit personal isWSL;
   };
 
   modules = [
     ../home
-
-    # Machine-specific Home Manager configuration (optional)
-    # Uncomment if you have machine-specific home configs
-    # (../machines/linux + "/${personal.hostname}.nix")
-  ];
+  ] ++ extraModules;
 }

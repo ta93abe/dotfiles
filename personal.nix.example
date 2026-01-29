@@ -11,4 +11,19 @@
     userName = "Your Name";
     userEmail = "your.email@example.com";
   };
+
+  # ============================================================================
+  # Multi-platform options (optional)
+  # ============================================================================
+
+  # WSL2 flag - set to true when using WSL2
+  # This flag is used to:
+  # - Filter out packages that don't work in WSL2 (e.g., wl-clipboard)
+  # - Enable WSL2-specific settings in machines/linux/wsl2.nix
+  # isWSL = false;
+
+  # Windows username (for WSL2 only)
+  # Set this if your Windows username differs from your WSL username
+  # Used to set WINDOWS_HOME environment variable
+  # windowsUsername = "your-windows-username";
 }

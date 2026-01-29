@@ -3,7 +3,7 @@
 # This is the main entry point for Home Manager configuration.
 # Individual program configurations are split into home/programs/ directory.
 # =============================================================================
-{ config, pkgs, lib, personal, ... }:
+{ config, pkgs, lib, personal, isWSL ? false, ... }:
 
 let
   isDarwin = pkgs.stdenv.isDarwin;
@@ -15,6 +15,8 @@ let
     else "/home/${personal.username}";
 in
 {
+  # Propagate isWSL to child modules
+  _module.args.isWSL = isWSL;
   imports = [
     # Package list
     ./packages.nix

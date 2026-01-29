@@ -17,9 +17,6 @@ darwin.lib.darwinSystem {
       nixpkgs.config.allowUnfree = true;
     }
 
-    # Machine-specific configuration
-    (../machines/darwin + "/${personal.hostname}.nix")
-
     # Darwin configuration (modularized)
     ../modules/darwin
 

@@ -17,30 +17,30 @@ in
     font-size = 14
     font-thicken = true
 
-    # Theme: Tokyo Night
-    background = 1a1b26
-    foreground = c0caf5
-    cursor-color = c0caf5
-    selection-background = 33467c
-    selection-foreground = c0caf5
+    # Theme: Monokai
+    background = 272822
+    foreground = F8F8F2
+    cursor-color = F8F8F2
+    selection-background = 49483E
+    selection-foreground = F8F8F2
 
-    # Colors
-    palette = 0=#15161e
-    palette = 1=#f7768e
-    palette = 2=#9ece6a
-    palette = 3=#e0af68
-    palette = 4=#7aa2f7
-    palette = 5=#bb9af7
-    palette = 6=#7dcfff
-    palette = 7=#a9b1d6
-    palette = 8=#414868
-    palette = 9=#f7768e
-    palette = 10=#9ece6a
-    palette = 11=#e0af68
-    palette = 12=#7aa2f7
-    palette = 13=#bb9af7
-    palette = 14=#7dcfff
-    palette = 15=#c0caf5
+    # Colors (Monokai)
+    palette = 0=#272822
+    palette = 1=#F92672
+    palette = 2=#A6E22E
+    palette = 3=#F4BF75
+    palette = 4=#66D9EF
+    palette = 5=#AE81FF
+    palette = 6=#A1EFE4
+    palette = 7=#F8F8F2
+    palette = 8=#75715E
+    palette = 9=#F92672
+    palette = 10=#A6E22E
+    palette = 11=#F4BF75
+    palette = 12=#66D9EF
+    palette = 13=#AE81FF
+    palette = 14=#A1EFE4
+    palette = 15=#F9F8F5
 
     # Window
     window-padding-x = 10
@@ -71,22 +71,22 @@ in
 
   # Zellij terminal multiplexer configuration
   xdg.configFile."zellij/config.kdl".text = ''
-    // Theme: Tokyo Night
-    theme "tokyo-night"
+    // Theme: Monokai
+    theme "monokai"
 
     themes {
-      tokyo-night {
-        fg "#c0caf5"
-        bg "#1a1b26"
-        black "#15161e"
-        red "#f7768e"
-        green "#9ece6a"
-        yellow "#e0af68"
-        blue "#7aa2f7"
-        magenta "#bb9af7"
-        cyan "#7dcfff"
-        white "#a9b1d6"
-        orange "#ff9e64"
+      monokai {
+        fg "#F8F8F2"
+        bg "#272822"
+        black "#272822"
+        red "#F92672"
+        green "#A6E22E"
+        yellow "#E6DB74"
+        blue "#66D9EF"
+        magenta "#AE81FF"
+        cyan "#A1EFE4"
+        white "#F8F8F2"
+        orange "#FD971F"
       }
     }
 

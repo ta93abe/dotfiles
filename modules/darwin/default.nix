@@ -32,24 +32,8 @@
     cmake
     protobuf
 
-    # Databases & Services
-    postgresql_14
-    mariadb
-    redis
-    mongodb-community
-    nginx
-
-    # Cloud & DevOps
+    # Container tools
     docker
-    docker-compose
-    kubernetes
-    terraform
-    vault
-    consul
-    nomad
-    packer
-
-    # Container & VM tools
     colima
   ];
 
